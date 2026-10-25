@@ -6,7 +6,7 @@
     <title>بلو مانگا | مرجع مطالعه آنلاین مانگا با تم آبی دارک</title>
     
     <!-- بارگذاری Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com" onerror="window.__twFailed=1"></script>
+    <!--TW-CDN-START--><script src="https://cdn.tailwindcss.com" onerror="window.__twFailed=1"></script>
     <script>
         /* پشتیبان: اگر cdn.tailwindcss.com لود نشد (فیلتر/تحریم/مرورگر قدیمی)، Tailwind را از jsDelivr بگیر */
         (function(){
@@ -21,17 +21,20 @@
             s.src = 'https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.1.11';
             document.head.appendChild(s);
         })();
-    </script>
+    </script><!--TW-CDN-END-->
     
     <!-- فونت‌های فارسی وزیرمتن، لاله‌زار و فونت ژاپنی -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Lalezar&family=Noto+Serif+JP:wght@600;900&family=Vazirmatn:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lalezar&family=Noto+Serif+JP:wght@600;900&family=Vazirmatn:wght@300;400;500;700;900&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Lalezar&family=Noto+Serif+JP:wght@600;900&family=Vazirmatn:wght@300;400;500;700;900&display=swap" rel="stylesheet"></noscript>
     
     <!-- آیکون‌های FontAwesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!--FA-START--><link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"></noscript><!--FA-END-->
 
-    <script>
+    <!--TW-CFG-START--><script>
         window.tailwind = window.tailwind || {};
         tailwind.config = {
             theme: {
@@ -56,7 +59,7 @@
                 }
             }
         }
-    </script>
+    </script><!--TW-CFG-END-->
 
     <style>
         /* ===== CSS اضطراری: وقتی Tailwind لود نشود، صفحه نباید خراب شود (specificity صفر؛ اگر Tailwind بود، او برنده است) ===== */
