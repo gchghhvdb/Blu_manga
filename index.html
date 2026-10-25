@@ -313,8 +313,8 @@
             box-shadow: inset 0 1px 0 rgba(255,255,255,.25); backdrop-filter: none; }
 
         /* ===== پروفایل تیم ترجمه با نوار چرخان ===== */
-        .aw-credit { display:flex; align-items:center; gap:14px; padding-top:18px; }
-        .aw-burn { position:relative; isolation:isolate; flex:none; width:56px; height:56px; border-radius:50%; }
+        .aw-credit { display:none; align-items:center; gap:12px; padding-top:14px; }
+        .aw-burn { position:relative; isolation:isolate; flex:none; width:42px; height:42px; border-radius:50%; }
         .aw-burn::before, .aw-burn::after { content:""; position:absolute; border-radius:50%; pointer-events:none;
             background: conic-gradient(from var(--a), transparent 0 52%, #1d4ed8 66%, #60a5fa 82%, #eff6ff 94%, transparent 100%);
             animation: spinGlow 3.2s linear infinite; }
@@ -323,7 +323,7 @@
             -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
             mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0); }
         .aw-burn img { position:relative; z-index:1; width:100%; height:100%; border-radius:50%; object-fit:cover; display:block; border:1px solid rgba(147,197,253,.25); background:#0a1c4d; }
-        .aw-credit span.t { font-size:13px; color:#bfdbfe; line-height:1.7; }
+        .aw-credit span.t { font-size:12px; color:#bfdbfe; line-height:1.7; }
         .aw-credit span.t b { color:#fff; font-weight:700; }
     </style>
 </head>
@@ -590,9 +590,9 @@
                         </div>
 
                         <!-- تیم مترجم -->
-                        <div class="aw-credit">
-                            <span class="aw-burn"><img src="aw-manga.jpg" alt="AW Manga" width="56" height="56" loading="lazy" decoding="async"></span>
-                            <span class="t">توسط تیم <b dir="ltr">AW Manga</b> ترجمه شده</span>
+                        <div class="aw-credit" id="detail-credit">
+                            <span class="aw-burn"><img id="detail-credit-img" src="aw-manga.jpg" alt="" width="42" height="42" loading="lazy" decoding="async"></span>
+                            <span class="t">توسط تیم <b dir="ltr" id="detail-credit-name">AW Manga</b> ترجمه شده</span>
                         </div>
                     </div>
                 </div>
@@ -1751,6 +1751,17 @@ document.addEventListener('keydown', e => {
             document.getElementById('detail-year-badge').textContent = `انتشار: ${manga.year}`;
             document.getElementById('detail-rating-badge').innerHTML = `<i class="fa-solid fa-star ml-1"></i>${manga.rating} / 10`;
             document.getElementById('detail-title-fa').textContent = manga.titleFa;
+            // تیم مترجم: برای هر مانگا که منبعش مشخص است (کلید = id مانگا)
+            (function () {
+                const TRANSLATORS = { 1: { name: 'AW Manga', logo: 'aw-manga.jpg' } };
+                const t = TRANSLATORS[manga.id], box = document.getElementById('detail-credit');
+                if (!box) return;
+                if (t) {
+                    document.getElementById('detail-credit-name').textContent = t.name;
+                    const im = document.getElementById('detail-credit-img'); im.src = t.logo; im.alt = t.name;
+                    box.style.display = 'flex';
+                } else box.style.display = 'none';
+            })();
             document.getElementById('detail-title-en').textContent = `${manga.titleEn} • ${manga.jpTitle}`;
             document.getElementById('detail-author').innerHTML = `<i class="fa-solid fa-pen-nib text-blue-400 ml-1.5"></i>نویسنده و طراح: <strong>${manga.author}</strong>`;
 
