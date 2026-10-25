@@ -11,7 +11,7 @@ input[type=checkbox]{width:auto;margin-left:6px}button{background:#2563eb;border
 <label><input type="checkbox" id="rem">به‌خاطر سپردن کلیدها روی این دستگاه</label></div>
 <div class="box"><label>مانگا</label><select id="mg"></select><label>پوشه (slug)</label><input id="sl" dir="ltr">
 <label>شماره چپتر</label><input id="cn" type="number" min="0" step="any" inputmode="decimal"><label>عنوان چپتر (اختیاری)</label><input id="ct">
-<label>عکس‌ها (چندتایی)</label><input id="fl" type="file" accept="image/*" multiple>
+<label>عکس‌ها (چندتایی)</label><input id="fl" type="file" accept="image/*" multiple><label>یا یک فایل ZIP (عکس‌های چپتر داخلش)</label><input id="zp" type="file" accept=".zip,application/zip,application/x-zip-compressed">
 <label><input type="checkbox" id="wp" checked>تبدیل به WebP و کم‌حجم کردن</label><label>حداکثر عرض (پیکسل)</label><input id="mw" type="number" value="1000" inputmode="numeric"></div>
 <button id="go">آپلود چپتر</button><div id="bar"><i></i></div><div class="box"><div id="log"></div></div>
 <script>
@@ -35,12 +35,26 @@ let b=await new Promise(r=>c.toBlob(r,'image/webp',.82));if(b&&b.type==='image/w
 async function loadJ(){try{const r=await fetch(base()+'chapters.json?t='+Date.now());J=r.ok?await r.json():{}}catch(e){J={}}}
 function fill(){const m=M.find(x=>x[0]==$('mg').value);$('sl').value=(J[m[0]]&&J[m[0]].slug)||m[2]}
 $('mg').onchange=fill;$('ep').onchange=$('bk').onchange=async()=>{await loadJ();fill()};loadJ().then(fill);
-$('go').onclick=async()=>{const fs=[...$('fl').files].sort((a,b)=>a.name.localeCompare(b.name,undefined,{numeric:true})),id=$('mg').value,slug=$('sl').value.trim().toLowerCase(),num=$('cn').value.trim();
-if(!$('ak').value||!$('sk').value)return alert('کلیدها را وارد کن');if(!fs.length||!num||!slug)return alert('مانگا، شماره چپتر و عکس‌ها را کامل کن');
+async function unzip(file){
+if(typeof DecompressionStream==='undefined')throw new Error('این مرورگر ZIP را باز نمی‌کند؛ عکس‌ها را مستقیم انتخاب کن');
+const buf=await file.arrayBuffer(),dv=new DataView(buf),u8=new Uint8Array(buf);let e=-1;
+for(let i=buf.byteLength-22;i>=Math.max(0,buf.byteLength-65557);i--){if(dv.getUint32(i,true)===0x06054b50){e=i;break}}
+if(e<0)throw new Error('فایل ZIP معتبر نیست');
+const n=dv.getUint16(e+10,true);let p=dv.getUint32(e+16,true);const D=new TextDecoder('utf-8'),out=[];
+for(let k=0;k<n;k++){if(dv.getUint32(p,true)!==0x02014b50)break;
+const meth=dv.getUint16(p+10,true),cs=dv.getUint32(p+20,true),nl=dv.getUint16(p+28,true),el=dv.getUint16(p+30,true),cl=dv.getUint16(p+32,true),lo=dv.getUint32(p+42,true),name=D.decode(u8.subarray(p+46,p+46+nl));p+=46+nl+el+cl;
+const bn=name.split('/').pop();
+if(!bn||name.endsWith('/')||/(^|\/)(__MACOSX|\.)/.test(name)||!/\.(jpe?g|png|webp|gif|avif|bmp)$/i.test(bn))continue;
+const ln=dv.getUint16(lo+26,true),le=dv.getUint16(lo+28,true),ds=lo+30+ln+le,raw=new Blob([u8.subarray(ds,ds+cs)]);let blob;
+if(meth===0)blob=raw;else if(meth===8)blob=await new Response(raw.stream().pipeThrough(new DecompressionStream('deflate-raw'))).blob();else continue;
+const ext=bn.split('.').pop().toLowerCase(),f=new File([blob],bn,{type:ext==='jpg'?'image/jpeg':'image/'+ext});f.zipPath=name;out.push(f)}
+return out}
+$('go').onclick=async()=>{let fs=[...$('fl').files];const zf=$('zp').files[0],id=$('mg').value,slug=$('sl').value.trim().toLowerCase(),num=$('cn').value.trim();
+if(!$('ak').value||!$('sk').value)return alert('کلیدها را وارد کن');if(!(fs.length||zf)||!num||!slug)return alert('مانگا، شماره چپتر و عکس‌ها (یا ZIP) را کامل کن');
 ['ep','bk','ak','sk'].forEach(i=>{localStorage.removeItem('adm_'+i);sessionStorage.removeItem('adm_'+i);st().setItem('adm_'+i,$(i).value)});
-$('go').disabled=true;$('log').textContent='';const paths=[];try{await loadJ();
+$('go').disabled=true;$('log').textContent='';const paths=[];try{await loadJ();if(zf){log('در حال باز کردن ZIP…');const zs=await unzip(zf);log('✓ '+zs.length+' عکس در ZIP پیدا شد');fs=fs.concat(zs)}fs.sort((a,b)=>(a.zipPath||a.name).localeCompare(b.zipPath||b.name,undefined,{numeric:true}));if(!fs.length)throw new Error('عکسی پیدا نشد');
 for(let i=0;i<fs.length;i++){const c=await conv(fs[i]),p=`${slug}/${num}/${String(i+1).padStart(3,'0')}.${c.e}`;await put(p,c.b,c.b.type||'image/'+c.e);paths.push(p);$('bar').firstChild.style.width=((i+1)/(fs.length+1)*100)+'%';log(`✓ ${p}  (${Math.round(c.b.size/1024)}KB)`)}
 await loadJ();const o=J[id]=J[id]||{chapters:{},titles:{}};o.slug=slug;o.chapters=o.chapters||{};o.titles=o.titles||{};o.chapters[num]=paths;if($('ct').value.trim())o.titles[num]=$('ct').value.trim();
-await put('chapters.json',JSON.stringify(J),'application/json');$('bar').firstChild.style.width='100%';log('✓ چپتر '+num+' ثبت شد ('+paths.length+' صفحه). سایت را رفرش کن.');$('fl').value=''}
+await put('chapters.json',JSON.stringify(J),'application/json');$('bar').firstChild.style.width='100%';log('✓ چپتر '+num+' ثبت شد ('+paths.length+' صفحه). سایت را رفرش کن.');$('fl').value='';$('zp').value=''}
 catch(e){log('✗ خطا: '+e.message+'\nاگر AccessDenied یا SignatureDoesNotMatch است، کلیدها/Endpoint/نام صندوقچه را چک کن.')}$('go').disabled=false};
 </script></body></html>
