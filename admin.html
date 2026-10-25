@@ -1,0 +1,46 @@
+<!DOCTYPE html><html lang="fa" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>پنل آپلود چپتر</title>
+<style>:root{color-scheme:dark}body{margin:0;background:#050b1f;color:#e6edff;font:14px/1.7 system-ui,Tahoma,sans-serif;padding:16px;max-width:560px;margin:auto}
+h1{font-size:18px}label{display:block;margin:10px 0 3px;color:#9db4ff;font-size:12px}input,select,button{width:100%;box-sizing:border-box;background:#0d1a3d;border:1px solid #27407f;color:#fff;border-radius:10px;padding:11px;font:inherit}
+input[type=checkbox]{width:auto;margin-left:6px}button{background:#2563eb;border:0;font-weight:700;margin-top:14px}button:disabled{opacity:.5}
+.box{background:#0a1431;border:1px solid #1c2f66;border-radius:14px;padding:12px;margin:12px 0}small{color:#8fa3d6}#log{white-space:pre-wrap;font:12px/1.6 monospace;direction:ltr;text-align:left;max-height:260px;overflow:auto}
+#bar{height:8px;background:#0d1a3d;border-radius:8px;overflow:hidden;margin-top:10px}#bar i{display:block;height:100%;width:0;background:#38bdf8}</style></head><body>
+<h1>پنل آپلود چپتر</h1>
+<div class="box"><small>کلیدها فقط داخل مرورگر همین گوشی می‌مانند و جایی فرستاده نمی‌شوند جز خود آروان. فقط از کلید کاربر ماشینی محدود به همین صندوقچه استفاده کن.</small>
+<label>Endpoint</label><input id="ep" value="s3.ir-central1.arvanstorage.ir" dir="ltr"><label>نام صندوقچه</label><input id="bk" value="mahdiggff2" dir="ltr">
+<label>Access Key</label><input id="ak" dir="ltr" autocomplete="off"><label>Secret Key</label><input id="sk" type="password" dir="ltr" autocomplete="off">
+<label><input type="checkbox" id="rem">به‌خاطر سپردن کلیدها روی این دستگاه</label></div>
+<div class="box"><label>مانگا</label><select id="mg"></select><label>پوشه (slug)</label><input id="sl" dir="ltr">
+<label>شماره چپتر</label><input id="cn" type="number" min="0" step="any" inputmode="decimal"><label>عنوان چپتر (اختیاری)</label><input id="ct">
+<label>عکس‌ها (چندتایی)</label><input id="fl" type="file" accept="image/*" multiple>
+<label><input type="checkbox" id="wp" checked>تبدیل به WebP و کم‌حجم کردن</label><label>حداکثر عرض (پیکسل)</label><input id="mw" type="number" value="1000" inputmode="numeric"></div>
+<button id="go">آپلود چپتر</button><div id="bar"><i></i></div><div class="box"><div id="log"></div></div>
+<script>
+const M=[[0, "مرد اره‌ای", "chainsaw-man"], [1, "وان پیس", "one-piece"], [2, "توکیو غول", "tokyo-ghoul"], [3, "اسلم دانک", "slam-dunk"], [4, "مانستر (هیولا)", "monster"], [5, "کاگوراباچی", "kagurabachi"], [6, "واگاباند (ولگرد)", "vagabond"], [7, "برسرک (Berserk)", "berserk"], [8, "جوجوتسو کایسن", "jujutsu-kaisen"], [9, "گاچیاکوتا", "gachiakuta"], [10, "حمله به تایتان", "attack-on-titan"], [11, "کوهنورد (ایزوله)", "the-climber-kokou-no-hito"], [12, "فایر پانچ (مشت آتشین)", "fire-punch"], [13, "موب سایکو ۱۰۰", "mob-psycho-100"], [14, "شیطان‌کش (کیمتسو نو یائیبا)", "demon-slayer-kimetsu-no-yaiba"], [101, "هانتر × هانتر", "hunter-x-hunter"], [102, "ناروتو", "naruto"], [103, "بلیچ", "bleach"], [104, "دفترچه مرگ", "death-note"], [105, "هایکیو!! (والیبال)", "haikyu"]];const $=i=>document.getElementById(i),E=new TextEncoder(),log=t=>{$('log').textContent+=t+'\n';$('log').scrollTop=1e9};
+const hex=b=>[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join(''),sha=async d=>hex(await crypto.subtle.digest('SHA-256',d));
+const hm=async(k,d)=>new Uint8Array(await crypto.subtle.sign('HMAC',await crypto.subtle.importKey('raw',k,{name:'HMAC',hash:'SHA-256'},false,['sign']),E.encode(d)));
+const st=()=>$('rem').checked?localStorage:sessionStorage;
+['ep','bk','ak','sk'].forEach(i=>{const v=localStorage.getItem('adm_'+i)||sessionStorage.getItem('adm_'+i);if(v){$(i).value=v;if(localStorage.getItem('adm_'+i))$('rem').checked=true}});
+M.forEach(m=>$('mg').add(new Option(m[1]+' ('+m[0]+')',m[0])));
+let J={};const base=()=>`https://${$('bk').value}.${$('ep').value}/`;
+const regs=()=>[...new Set([window.__r,'us-east-1','ir-central1','ir-thr-at1','default'].filter(Boolean))];
+async function put(key,body,type){const buf=typeof body==='string'?E.encode(body):await body.arrayBuffer(),ph=await sha(buf),host=`${$('bk').value}.${$('ep').value}`,uri='/'+key.split('/').map(encodeURIComponent).join('/');let last='';
+for(const rg of regs()){const now=new Date().toISOString().replace(/[:-]|\.\d{3}/g,''),d=now.slice(0,8),H=[['host',host],['x-amz-acl','public-read'],['x-amz-content-sha256',ph],['x-amz-date',now]],sg=H.map(h=>h[0]).join(';');
+const cr=`PUT\n${uri}\n\n${H.map(h=>h[0]+':'+h[1]+'\n').join('')}\n${sg}\n${ph}`,sc=`${d}/${rg}/s3/aws4_request`,sts=`AWS4-HMAC-SHA256\n${now}\n${sc}\n${await sha(E.encode(cr))}`;
+let k=await hm(E.encode('AWS4'+$('sk').value.trim()),d);k=await hm(k,rg);k=await hm(k,'s3');k=await hm(k,'aws4_request');const sig=hex(await hm(k,sts));
+const r=await fetch('https://'+host+uri,{method:'PUT',body:buf,headers:{'Authorization':`AWS4-HMAC-SHA256 Credential=${$('ak').value.trim()}/${sc}, SignedHeaders=${sg}, Signature=${sig}`,'x-amz-acl':'public-read','x-amz-content-sha256':ph,'x-amz-date':now,'Content-Type':type}});
+if(r.ok){window.__r=rg;return}last=r.status+' '+(await r.text()).slice(0,160);if(r.status!=403)break}
+throw new Error(last)}
+async function conv(f){if(!$('wp').checked)return{b:f,e:(f.name.split('.').pop()||'jpg').toLowerCase()};const bm=await createImageBitmap(f),w=Math.min(bm.width,+$('mw').value||1000),h=Math.round(bm.height*w/bm.width),c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(bm,0,0,w,h);bm.close&&bm.close();
+let b=await new Promise(r=>c.toBlob(r,'image/webp',.82));if(b&&b.type==='image/webp')return{b,e:'webp'};b=await new Promise(r=>c.toBlob(r,'image/jpeg',.85));return{b,e:'jpg'}}
+async function loadJ(){try{const r=await fetch(base()+'chapters.json?t='+Date.now());J=r.ok?await r.json():{}}catch(e){J={}}}
+function fill(){const m=M.find(x=>x[0]==$('mg').value);$('sl').value=(J[m[0]]&&J[m[0]].slug)||m[2]}
+$('mg').onchange=fill;$('ep').onchange=$('bk').onchange=async()=>{await loadJ();fill()};loadJ().then(fill);
+$('go').onclick=async()=>{const fs=[...$('fl').files].sort((a,b)=>a.name.localeCompare(b.name,undefined,{numeric:true})),id=$('mg').value,slug=$('sl').value.trim().toLowerCase(),num=$('cn').value.trim();
+if(!$('ak').value||!$('sk').value)return alert('کلیدها را وارد کن');if(!fs.length||!num||!slug)return alert('مانگا، شماره چپتر و عکس‌ها را کامل کن');
+['ep','bk','ak','sk'].forEach(i=>{localStorage.removeItem('adm_'+i);sessionStorage.removeItem('adm_'+i);st().setItem('adm_'+i,$(i).value)});
+$('go').disabled=true;$('log').textContent='';const paths=[];try{await loadJ();
+for(let i=0;i<fs.length;i++){const c=await conv(fs[i]),p=`${slug}/${num}/${String(i+1).padStart(3,'0')}.${c.e}`;await put(p,c.b,c.b.type||'image/'+c.e);paths.push(p);$('bar').firstChild.style.width=((i+1)/(fs.length+1)*100)+'%';log(`✓ ${p}  (${Math.round(c.b.size/1024)}KB)`)}
+await loadJ();const o=J[id]=J[id]||{chapters:{},titles:{}};o.slug=slug;o.chapters=o.chapters||{};o.titles=o.titles||{};o.chapters[num]=paths;if($('ct').value.trim())o.titles[num]=$('ct').value.trim();
+await put('chapters.json',JSON.stringify(J),'application/json');$('bar').firstChild.style.width='100%';log('✓ چپتر '+num+' ثبت شد ('+paths.length+' صفحه). سایت را رفرش کن.');$('fl').value=''}
+catch(e){log('✗ خطا: '+e.message+'\nاگر AccessDenied یا SignatureDoesNotMatch است، کلیدها/Endpoint/نام صندوقچه را چک کن.')}$('go').disabled=false};
+</script></body></html>

@@ -822,8 +822,6 @@
         // =========================================================================
         const CHAPTER_BASE = 'https://mahdiggff2.s3.ir-central1.arvanstorage.ir/';
         const MANGA_CHAPTERS = {
-            // تست — بعد از اطمینان از کار کردن این خط را پاک کن:
-            0: { slug: 'chainsaw-man', ext: 'webp', chapters: { 1: ['aw_blame_ch33_p01.png'] }, titles: { 1: 'چپتر تستی' } },
         };
         function chapterPages(mangaId, num) {
             const cfg = MANGA_CHAPTERS[mangaId];
@@ -835,6 +833,14 @@
                 `${CHAPTER_BASE}${cfg.slug}/${num}/${String(i + 1).padStart(3, '0')}.${ext}`);
         }
 
+        // لیست چپترها از فایل chapters.json داخل صندوقچه خوانده می‌شود (پنل admin.html آن را به‌روز می‌کند)
+        (function () {
+            fetch(CHAPTER_BASE + 'chapters.json?t=' + Date.now()).then(r => r.ok ? r.json() : null).then(j => {
+                if (!j) return;
+                Object.keys(j).forEach(k => { MANGA_CHAPTERS[k] = j[k]; });
+                try { renderChaptersList(); } catch (e) {}
+            }).catch(() => {});
+        })();
         // ---------- لیست چپترها در تب «چپتر» ----------
         function renderChaptersList() {
             const box = document.getElementById('chapters-list-container');
