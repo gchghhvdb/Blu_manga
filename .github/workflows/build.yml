@@ -1,0 +1,65 @@
+name: build-site
+on:
+  push:
+  workflow_dispatch:
+permissions:
+  contents: write
+  pages: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: check
+        id: chk
+        run: |
+          if grep -q 'TW-CDN-START' index.html; then echo "needed=true" >> $GITHUB_OUTPUT; else echo "needed=false" >> $GITHUB_OUTPUT; fi
+      - name: build tailwind
+        if: steps.chk.outputs.needed == 'true'
+        run: |
+          cat > tailwind.config.js <<'EOF'
+          module.exports = {
+            content: ['./index.html'],
+            theme: { extend: {
+              fontFamily: { sans: ['Vazirmatn','sans-serif'], display: ['Lalezar','cursive'], jp: ['"Noto Serif JP"','serif'] },
+              colors: { navy: { 950:'#01040d', 900:'#030a1f', 850:'#061231', 800:'#0a1c4d', 700:'#12307a', 600:'#1e4fc4', 500:'#3b82f6', 400:'#60a5fa' } }
+            } }
+          }
+          EOF
+          printf '@tailwind base;\n@tailwind components;\n@tailwind utilities;\n' > input.css
+          npx -y tailwindcss@3.4.17 -c tailwind.config.js -i input.css -o tailwind.css --minify
+          test $(wc -c < tailwind.css) -gt 5000
+      - name: download font awesome
+        if: steps.chk.outputs.needed == 'true'
+        run: |
+          B=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1
+          mkdir -p fa/css fa/webfonts
+          curl -fsSL $B/css/all.min.css -o fa/css/all.min.css
+          for f in fa-solid-900 fa-regular-400 fa-brands-400 fa-v4compatibility; do curl -fsSL $B/webfonts/$f.woff2 -o fa/webfonts/$f.woff2; done
+      - name: patch index.html
+        if: steps.chk.outputs.needed == 'true'
+        run: |
+          python3 - <<'PY'
+          h=open('index.html',encoding='utf-8').read()
+          def cut(h,a,b,rep=''):
+              i=h.index(a); j=h.index(b,i)+len(b); return h[:i]+rep+h[j:]
+          h=cut(h,'<!--TW-CDN-START-->','<!--TW-CDN-END-->')
+          h=cut(h,'<!--TW-CFG-START-->','<!--TW-CFG-END-->')
+          h=cut(h,'<!--FA-START-->','<!--FA-END-->','<link rel="stylesheet" href="fa/css/all.min.css">')
+          h=h.replace('</head>','    <link rel="stylesheet" href="tailwind.css">\n</head>',1)
+          open('index.html','w',encoding='utf-8').write(h)
+          PY
+      - name: commit
+        if: steps.chk.outputs.needed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html tailwind.css fa
+          git commit -m "build: tailwind css + local font awesome"
+          git push
+          gh api -X POST repos/$GITHUB_REPOSITORY/pages/builds || true
