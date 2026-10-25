@@ -6,22 +6,7 @@
     <title>بلو مانگا | مرجع مطالعه آنلاین مانگا با تم آبی دارک</title>
     
     <!-- بارگذاری Tailwind CSS -->
-    <!--TW-CDN-START--><script src="https://cdn.tailwindcss.com" onerror="window.__twFailed=1"></script>
-    <script>
-        /* پشتیبان: اگر cdn.tailwindcss.com لود نشد (فیلتر/تحریم/مرورگر قدیمی)، Tailwind را از jsDelivr بگیر */
-        (function(){
-            if (typeof window.tailwind !== 'undefined') return;
-            var st = document.createElement('style');
-            st.type = 'text/tailwindcss';
-            st.textContent = '@theme{--font-sans:"Vazirmatn",sans-serif;--font-display:"Lalezar",cursive;--font-jp:"Noto Serif JP",serif;'
-              + '--color-navy-950:#01040d;--color-navy-900:#030a1f;--color-navy-850:#061231;--color-navy-800:#0a1c4d;'
-              + '--color-navy-700:#12307a;--color-navy-600:#1e4fc4;--color-navy-500:#3b82f6;--color-navy-400:#60a5fa;}';
-            document.head.appendChild(st);
-            var s = document.createElement('script');
-            s.src = 'https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.1.11';
-            document.head.appendChild(s);
-        })();
-    </script><!--TW-CDN-END-->
+    
     
     <!-- فونت‌های فارسی وزیرمتن، لاله‌زار و فونت ژاپنی -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -30,36 +15,9 @@
     <noscript><link href="https://fonts.googleapis.com/css2?family=Lalezar&family=Noto+Serif+JP:wght@600;900&family=Vazirmatn:wght@300;400;500;700;900&display=swap" rel="stylesheet"></noscript>
     
     <!-- آیکون‌های FontAwesome -->
-    <!--FA-START--><link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" media="print" onload="this.media='all'">
-    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"></noscript><!--FA-END-->
+    <link rel="stylesheet" href="fa/css/all.min.css">
 
-    <!--TW-CFG-START--><script>
-        window.tailwind = window.tailwind || {};
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Vazirmatn', 'sans-serif'],
-                        display: ['Lalezar', 'cursive'],
-                        jp: ['"Noto Serif JP"', 'serif']
-                    },
-                    colors: {
-                        navy: {
-                            950: '#01040d', /* آبی خیلی تیره - پس‌زمینه اصلی */
-                            900: '#030a1f', /* دارک آبی لایه دوم */
-                            850: '#061231', /* کارت‌های سرمه‌ای تیره */
-                            800: '#0a1c4d', /* هاور کارت‌ها و پنل‌ها */
-                            700: '#12307a', /* حاشیه‌ها و دکمه‌های فرعی */
-                            600: '#1e4fc4',
-                            500: '#3b82f6', /* آبی الکتریک ملایم */
-                            400: '#60a5fa',
-                        }
-                    }
-                }
-            }
-        }
-    </script><!--TW-CFG-END-->
+    
 
     <style>
         /* ===== CSS اضطراری: وقتی Tailwind لود نشود، صفحه نباید خراب شود (specificity صفر؛ اگر Tailwind بود، او برنده است) ===== */
@@ -360,6 +318,7 @@
             #manga-grid .m-card .rank { font-size: 1.6rem !important; }
         }
     </style>
+    <link rel="stylesheet" href="tailwind.css">
 </head>
 <body class="selection:bg-blue-600 selection:text-white">
 
