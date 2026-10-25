@@ -311,6 +311,20 @@
             mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0); }
         .burn input { position: relative; z-index: 1; background-color: rgba(1,6,22,.94) !important; border: 1px solid rgba(147,197,253,.22) !important;
             box-shadow: inset 0 1px 0 rgba(255,255,255,.25); backdrop-filter: none; }
+
+        /* ===== پروفایل تیم ترجمه با نوار چرخان ===== */
+        .aw-credit { display:flex; align-items:center; gap:14px; padding-top:18px; }
+        .aw-burn { position:relative; isolation:isolate; flex:none; width:56px; height:56px; border-radius:50%; }
+        .aw-burn::before, .aw-burn::after { content:""; position:absolute; border-radius:50%; pointer-events:none;
+            background: conic-gradient(from var(--a), transparent 0 52%, #1d4ed8 66%, #60a5fa 82%, #eff6ff 94%, transparent 100%);
+            animation: spinGlow 3.2s linear infinite; }
+        .aw-burn::before { inset:-3px; z-index:-1; filter:blur(8px); opacity:.95; }
+        .aw-burn::after { inset:-2px; z-index:2; padding:2px;
+            -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
+            mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0); }
+        .aw-burn img { position:relative; z-index:1; width:100%; height:100%; border-radius:50%; object-fit:cover; display:block; border:1px solid rgba(147,197,253,.25); background:#0a1c4d; }
+        .aw-credit span.t { font-size:13px; color:#bfdbfe; line-height:1.7; }
+        .aw-credit span.t b { color:#fff; font-weight:700; }
     </style>
 </head>
 <body class="selection:bg-blue-600 selection:text-white">
@@ -573,6 +587,12 @@
                                 <i class="fa-regular fa-bookmark"></i>
                                 <span>افزودن به لیست من</span>
                             </button>
+                        </div>
+
+                        <!-- تیم مترجم -->
+                        <div class="aw-credit">
+                            <span class="aw-burn"><img src="aw-manga.jpg" alt="AW Manga" width="56" height="56" loading="lazy" decoding="async"></span>
+                            <span class="t">توسط تیم <b dir="ltr">AW Manga</b> ترجمه شده</span>
                         </div>
                     </div>
                 </div>
