@@ -872,56 +872,141 @@
                 </div>`;
         }
 
-        // ---------- چپترخوان تمام‌صفحه ----------
-        function ensureReaderOverlay() {
-            let o = document.getElementById('reader-overlay');
-            if (o) return o;
-            o = document.createElement('div');
-            o.id = 'reader-overlay';
-            o.className = 'hidden fixed inset-0 z-[200] bg-black overflow-y-auto';
-            o.innerHTML = `
-                <div class="sticky top-0 z-10 flex items-center justify-between gap-2 px-3 py-2.5 bg-black/85 backdrop-blur border-b border-white/10">
-                    <button onclick="closeReader()" class="px-3 py-2 rounded-lg bg-white/10 text-white text-xs flex items-center gap-1.5"><i class="fa-solid fa-xmark"></i>بستن</button>
-                    <div id="reader-title" class="text-white text-xs sm:text-sm font-bold truncate"></div>
-                    <div class="flex gap-1.5">
-                        <button onclick="readerStep(-1)" class="px-3 py-2 rounded-lg bg-white/10 text-white text-xs">قبلی</button>
-                        <button onclick="readerStep(1)" class="px-3 py-2 rounded-lg bg-blue-600 text-white text-xs">بعدی</button>
-                    </div>
+        // ---------- چپترخوان تمام‌صفحه (حالت صفحه‌ای راست‌به‌چپ + حالت اسکرول) ----------
+let crMode = (function () { try { return localStorage.getItem('crMode') || 'page'; } catch (e) { return 'page'; } })();
+let crPages = [], crIdx = 0, crBuilt = false;
+const crBtn = 'padding:8px 12px;border-radius:10px;background:rgba(255,255,255,.1);color:#fff;font-size:12px;white-space:nowrap';
+function ensureReaderOverlay() {
+    let o = document.getElementById('reader-overlay');
+    if (o) return o;
+    o = document.createElement('div');
+    o.id = 'reader-overlay';
+    o.style.cssText = 'display:none;position:fixed;inset:0;z-index:200;background:#000;flex-direction:column;height:100dvh';
+    o.innerHTML = `
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 10px;background:rgba(0,0,0,.92);border-bottom:1px solid rgba(255,255,255,.1)">
+            <button onclick="closeReader()" style="${crBtn}"><i class="fa-solid fa-xmark"></i> بستن</button>
+            <div style="min-width:0;text-align:center">
+                <div id="reader-title" style="color:#fff;font-size:12px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></div>
+                <div id="reader-counter" style="color:#9db4ff;font-size:11px;direction:ltr"></div>
+            </div>
+            <div style="display:flex;gap:6px">
+                <button id="reader-mode-btn" onclick="crToggleMode()" style="${crBtn}"></button>
+                <button onclick="readerStep(-1)" style="${crBtn}">قبلی</button>
+                <button onclick="readerStep(1)" style="${crBtn};background:#2563eb">بعدی</button>
+            </div>
+        </div>
+        <div style="height:3px;background:rgba(255,255,255,.1);direction:rtl"><div id="reader-bar" style="height:100%;width:0;background:#38bdf8;transition:width .15s"></div></div>
+        <div id="reader-body" style="flex:1;position:relative;overflow:hidden">
+            <div id="reader-page" style="position:absolute;inset:0;touch-action:pan-y">
+                <img id="reader-img" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;user-select:none;-webkit-user-drag:none">
+                <div id="reader-end" style="display:none;position:absolute;inset:0;flex-direction:column;align-items:center;justify-content:center;gap:12px;color:#fff;text-align:center">
+                    <div style="font-size:16px;font-weight:700">پایان چپتر</div>
+                    <button onclick="readerStep(1)" style="padding:12px 24px;border-radius:12px;background:#2563eb;color:#fff;font-size:14px">چپتر بعدی</button>
+                    <button onclick="readerStep(-1)" style="padding:12px 24px;border-radius:12px;background:rgba(255,255,255,.1);color:#fff;font-size:14px">چپتر قبلی</button>
+                    <button onclick="crShowPage(0)" style="padding:8px 16px;color:#9db4ff;font-size:12px">خواندن دوباره از اول</button>
                 </div>
-                <div id="reader-pages" class="max-w-3xl mx-auto"></div>
-                <div class="max-w-3xl mx-auto p-6 flex gap-2 justify-center">
-                    <button onclick="readerStep(-1)" class="px-5 py-3 rounded-xl bg-white/10 text-white text-sm">چپتر قبلی</button>
-                    <button onclick="readerStep(1)" class="px-5 py-3 rounded-xl bg-blue-600 text-white text-sm">چپتر بعدی</button>
-                </div>`;
-            document.body.appendChild(o);
-            return o;
-        }
-        function openReader(mangaId, num) {
-            const pages = chapterPages(mangaId, num);
-            if (!pages) { showToast('این چپتر هنوز آماده نیست'); return; }
-            const manga = mangaDatabase.find(m => m.id === mangaId);
-            activeMangaId = mangaId; activeReaderChapterNum = num;
-            const o = ensureReaderOverlay();
-            document.getElementById('reader-title').textContent = `${manga ? manga.titleFa : ''} — چپتر ${num}`;
-            document.getElementById('reader-pages').innerHTML = pages.map((p, i) =>
-                `<img src="${p}" alt="صفحه ${i + 1}" loading="${i < 3 ? 'eager' : 'lazy'}" decoding="async" class="block w-full h-auto" style="min-height:240px;background:#0a0f1f">`).join('');
-            o.classList.remove('hidden');
-            o.scrollTop = 0;
-            document.body.style.overflow = 'hidden';
-        }
-        function closeReader() {
-            const o = document.getElementById('reader-overlay');
-            if (o) o.classList.add('hidden');
-            document.body.style.overflow = '';
-        }
-        function readerStep(dir) {
-            const cfg = MANGA_CHAPTERS[activeMangaId]; if (!cfg) return;
-            const nums = Object.keys(cfg.chapters).map(Number).sort((a, b) => a - b);
-            const i = nums.indexOf(activeReaderChapterNum) + dir;
-            if (i < 0 || i >= nums.length) { showToast(dir > 0 ? 'این آخرین چپتر است' : 'این اولین چپتر است'); return; }
-            openReader(activeMangaId, nums[i]);
-        }
-        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeReader(); });
+            </div>
+            <div id="reader-scroll" style="display:none;position:absolute;inset:0;overflow-y:auto">
+                <div id="reader-pages" style="max-width:48rem;margin:0 auto"></div>
+                <div style="max-width:48rem;margin:0 auto;padding:24px;display:flex;gap:8px;justify-content:center">
+                    <button onclick="readerStep(-1)" style="padding:12px 20px;border-radius:12px;background:rgba(255,255,255,.1);color:#fff;font-size:14px">چپتر قبلی</button>
+                    <button onclick="readerStep(1)" style="padding:12px 20px;border-radius:12px;background:#2563eb;color:#fff;font-size:14px">چپتر بعدی</button>
+                </div>
+            </div>
+        </div>`;
+    document.body.appendChild(o);
+
+    // لمس: سمت چپ = صفحه‌ی بعد، سمت راست = صفحه‌ی قبل (مثل مانگای ژاپنی)
+    const pg = o.querySelector('#reader-page');
+    let sx = 0, sy = 0;
+    pg.addEventListener('touchstart', e => { sx = e.touches[0].clientX; sy = e.touches[0].clientY; }, { passive: true });
+    pg.addEventListener('touchend', e => {
+        const dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy;
+        if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) { crShowPage(crIdx + (dx > 0 ? 1 : -1)); pg._swiped = true; }
+    }, { passive: true });
+    pg.addEventListener('click', e => {
+        if (pg._swiped) { pg._swiped = false; return; }
+        if (e.target.closest('button')) return;
+        const r = pg.getBoundingClientRect(), x = (e.clientX - r.left) / r.width;
+        if (x < 0.4) crShowPage(crIdx + 1); else if (x > 0.6) crShowPage(crIdx - 1);
+    });
+    o.querySelector('#reader-scroll').addEventListener('scroll', e => {
+        const s = e.target, max = s.scrollHeight - s.clientHeight, p = max > 0 ? s.scrollTop / max : 0;
+        document.getElementById('reader-bar').style.width = (p * 100) + '%';
+        document.getElementById('reader-counter').textContent = Math.round(p * 100) + '%';
+    }, { passive: true });
+    return o;
+}
+function crShowPage(i) {
+    const n = crPages.length;
+    if (i < 0) { readerStep(-1); return; }
+    if (i > n) return;
+    crIdx = i;
+    const img = document.getElementById('reader-img'), end = document.getElementById('reader-end');
+    if (i === n) { img.style.display = 'none'; end.style.display = 'flex'; }
+    else { end.style.display = 'none'; img.style.display = 'block'; img.src = crPages[i]; }
+    for (let k = 1; k <= 2; k++) if (crPages[i + k]) { const pre = new Image(); pre.src = crPages[i + k]; }
+    document.getElementById('reader-counter').textContent = i === n ? 'پایان' : (i + 1) + ' / ' + n;
+    document.getElementById('reader-bar').style.width = (Math.min(i + 1, n) / n * 100) + '%';
+}
+function crApplyMode() {
+    const isPage = crMode === 'page';
+    document.getElementById('reader-page').style.display = isPage ? 'block' : 'none';
+    document.getElementById('reader-scroll').style.display = isPage ? 'none' : 'block';
+    document.getElementById('reader-mode-btn').innerHTML = isPage ? '<i class="fa-solid fa-arrows-up-down"></i> اسکرول' : '<i class="fa-solid fa-book-open"></i> صفحه‌ای';
+    if (isPage) { crShowPage(Math.min(crIdx, crPages.length)); return; }
+    const box = document.getElementById('reader-pages'), sc = document.getElementById('reader-scroll');
+    if (!crBuilt) {
+        box.innerHTML = crPages.map((p, i) =>
+            `<img src="${p}" alt="صفحه ${i + 1}" loading="${i < 3 ? 'eager' : 'lazy'}" decoding="async" style="display:block;width:100%;height:auto;min-height:240px;background:#0a0f1f">`).join('');
+        crBuilt = true;
+    }
+    const target = box.children[Math.min(crIdx, crPages.length - 1)];
+    sc.scrollTop = target ? target.offsetTop : 0;
+    sc.dispatchEvent(new Event('scroll'));
+}
+function crToggleMode() {
+    if (crMode === 'scroll') {  // از اسکرول به صفحه‌ای: صفحه‌ی در حال دیدن را پیدا کن
+        const sc = document.getElementById('reader-scroll'), imgs = [...document.getElementById('reader-pages').children];
+        const k = imgs.findIndex(im => im.offsetTop + im.offsetHeight > sc.scrollTop + 10);
+        crIdx = k < 0 ? 0 : k;
+    }
+    crMode = crMode === 'page' ? 'scroll' : 'page';
+    try { localStorage.setItem('crMode', crMode); } catch (e) {}
+    crApplyMode();
+}
+function openReader(mangaId, num) {
+    const pages = chapterPages(mangaId, num);
+    if (!pages) { showToast('این چپتر هنوز آماده نیست'); return; }
+    const manga = mangaDatabase.find(m => m.id === mangaId);
+    activeMangaId = mangaId; activeReaderChapterNum = num;
+    const o = ensureReaderOverlay();
+    crPages = pages; crIdx = 0; crBuilt = false;
+    document.getElementById('reader-pages').innerHTML = '';
+    document.getElementById('reader-title').textContent = `${manga ? manga.titleFa : ''} — چپتر ${num}`;
+    o.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+    crApplyMode();
+}
+function closeReader() {
+    const o = document.getElementById('reader-overlay');
+    if (o) o.style.display = 'none';
+    document.body.style.overflow = '';
+}
+function readerStep(dir) {
+    const cfg = MANGA_CHAPTERS[activeMangaId]; if (!cfg) return;
+    const nums = Object.keys(cfg.chapters).map(Number).sort((a, b) => a - b);
+    const i = nums.indexOf(activeReaderChapterNum) + dir;
+    if (i < 0 || i >= nums.length) { showToast(dir > 0 ? 'این آخرین چپتر است' : 'این اولین چپتر است'); return; }
+    openReader(activeMangaId, nums[i]);
+}
+document.addEventListener('keydown', e => {
+    const o = document.getElementById('reader-overlay');
+    if (!o || o.style.display === 'none') return;
+    if (e.key === 'Escape') closeReader();
+    else if (crMode === 'page' && e.key === 'ArrowLeft') crShowPage(crIdx + 1);
+    else if (crMode === 'page' && e.key === 'ArrowRight') crShowPage(crIdx - 1);
+});
 
 
         const defaultReadingPages = [
