@@ -343,6 +343,19 @@
         #glyph-video video { width:100%; height:100%; object-fit:cover; display:block; }
         html.gv #glyph-video { display:block; }
         html.gv #hero-glyphs { display:none !important; }
+        /* ===== کارت‌های فشرده‌تر برای نمایش ۳ تایی در موبایل ===== */
+        @media (max-width: 639px) {
+            #manga-grid .m-card .cover { border-radius: .85rem; }
+            #manga-grid .m-card .cap { padding: 1.4rem .45rem .4rem; }
+            #manga-grid .m-card .cap h3 { font-size: .68rem; line-height: 1.35; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+            #manga-grid .m-card .cap .en { display: none; }
+            #manga-grid .m-card .cap .go { margin-top:.3rem; padding:.18rem 0; font-size:.58rem; border-radius:.5rem; }
+            #manga-grid .m-card .cover > span.absolute { top:.35rem !important; right:.35rem !important; padding:.1rem .3rem !important; font-size:9px !important; gap:.15rem !important; border-radius:.45rem !important; }
+            #manga-grid .m-card .cover > span.absolute i { font-size:8px !important; }
+            #manga-grid .m-card .cover > button[aria-label] { top:.35rem !important; left:.35rem !important; width:1.5rem !important; height:1.5rem !important; border-radius:.45rem !important; }
+            #manga-grid .m-card .cover > button[aria-label] i { font-size:.62rem !important; }
+            #manga-grid .m-card .rank { font-size: 1.6rem !important; }
+        }
     </style>
 </head>
 <body class="selection:bg-blue-600 selection:text-white">
@@ -485,7 +498,7 @@
             </div>
 
             <!-- گرید ۱۵ کارت مانگا با انیمیشن اسکرول -->
-            <div id="manga-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-x-4 gap-y-8 sm:gap-x-5">
+            <div id="manga-grid" class="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-x-2.5 gap-y-5 sm:gap-x-5 sm:gap-y-8">
                 <!-- توسط جاوااسکریپت رندر می‌شود -->
             </div>
             <nav id="manga-pager" class="pager" aria-label="صفحه‌بندی کتابخانه"></nav>
