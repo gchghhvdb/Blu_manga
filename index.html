@@ -200,7 +200,7 @@
         .m-card .rank { bottom:auto !important; top:.1rem; left:50% !important; transform:translateX(-50%); font-size:2.5rem !important; }
         /* ===== v15: میدان حروف ژاپنی متحرک ===== */
         #hero-glyphs { position:absolute; inset:0; overflow:hidden; pointer-events:none; z-index:0;
-            -webkit-mask-image: radial-gradient(ellipse 85% 80% at 50% 45%, #000 35%, transparent 100%); mask-image: radial-gradient(ellipse 85% 80% at 50% 45%, #000 35%, transparent 100%); }
+            -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 5%, #000 88%, transparent 100%); mask-image: linear-gradient(to bottom, transparent 0%, #000 5%, #000 88%, transparent 100%); }
         #hero-glyphs .gl-rot { position:absolute; inset:0; direction:ltr; }
         #hero-glyphs .gl-wrap { position:absolute; left:var(--x); top:var(--y); transform:translate(-50%,-50%) rotate(var(--a)); }
         #hero-glyphs .gl-row { display:flex; width:max-content; white-space:nowrap; font-family:'Noto Serif JP',serif; font-weight:900; line-height:1.05; color:transparent;
@@ -2223,7 +2223,7 @@ document.addEventListener('keydown', e => {
             if (!host || !wrap || !inp) return;
             const wr = wrap.getBoundingClientRect(), ir = inp.getBoundingClientRect();
             if (!wr.height) return;
-            host.style.clipPath = 'inset(' + Math.max(0, Math.round(ir.top - wr.top - 8)) + 'px 0 0 0)';
+            host.style.clipPath = 'none'; // حروف از بالای بخش کتابخانه (زیر هیرو) شروع می‌شوند
         }
         window.addEventListener('load', () => {
             clipHeroGlyphs();
