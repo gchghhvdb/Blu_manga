@@ -330,7 +330,12 @@
         /* ===== سبک‌سازی صفحه اصلی ===== */
         #hero-halftone .d { animation: none !important; }
         .lib-aurora i { animation: none !important; will-change: auto; }
-        #hero-glyphs { -webkit-mask-image: none !important; mask-image: none !important; bottom: auto !important; height: 1500px; contain: layout paint; }
+        #hero-glyphs { -webkit-mask-image: none !important; mask-image: none !important; contain: layout paint; }
+        .pager { display:flex; flex-wrap:wrap; justify-content:center; gap:8px; padding:34px 0 8px; direction:rtl; position:relative; z-index:2; }
+        .pager .pg-btn { min-width:42px; height:42px; padding:0 12px; border-radius:12px; font:700 14px Vazirmatn,sans-serif; color:#bfdbfe; background:rgba(10,28,77,.7); border:1px solid rgba(147,197,253,.2); cursor:pointer; transition:background .2s, transform .2s; }
+        .pager .pg-btn:active { transform:scale(.94); }
+        .pager .pg-btn.on { background:#2563eb; color:#fff; border-color:rgba(255,255,255,.35); box-shadow:0 0 18px -2px rgba(59,130,246,.7); }
+        .pager .pg-btn.dis { opacity:.35; pointer-events:none; }
         .is-scrolling #hero-glyphs *, .is-scrolling #lib-backdrop *, .is-scrolling #hero-halftone * { animation-play-state: paused !important; }
     </style>
 </head>
@@ -464,7 +469,7 @@
                 </div>
                 <div class="flex items-center gap-2 text-xs">
                     <span class="text-blue-300/70">مرتب‌سازی:</span>
-                    <select id="sort-select" onchange="renderMangaGrid()" class="bg-navy-850 border border-blue-400/25 text-white rounded-xl px-3 py-1.5 text-xs focus:outline-none">
+                    <select id="sort-select" onchange="libPage=1;renderMangaGrid()" class="bg-navy-850 border border-blue-400/25 text-white rounded-xl px-3 py-1.5 text-xs focus:outline-none">
                         <option value="popular">محبوب‌ترین</option>
                         <option value="rating">بالاترین امتیاز</option>
                         
@@ -477,6 +482,7 @@
             <div id="manga-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-x-4 gap-y-8 sm:gap-x-5">
                 <!-- توسط جاوااسکریپت رندر می‌شود -->
             </div>
+            <nav id="manga-pager" class="pager" aria-label="صفحه‌بندی کتابخانه"></nav>
         </section></div>
 
         <!-- بخش سوم (۱۰٪ کل سایت): نوار جمع‌وجور دیالوگ‌های ماندگار و موضوعات مانگا -->
@@ -1635,6 +1641,32 @@ document.addEventListener('keydown', e => {
         // =========================================================================
         // ۳. رندر کتابخانه مانگاها (Manga Library Grid)
         // =========================================================================
+        const MANGA_PER_PAGE = 14;
+        let libPage = 1;
+
+        function renderPager(total) {
+            const box = document.getElementById('manga-pager');
+            if (!box) return;
+            if (total <= 1) { box.innerHTML = ''; return; }
+            const btn = (label, page, cls, aria) =>
+                `<button type="button" onclick="goLibPage(${page})" aria-label="${aria}" class="pg-btn ${cls}">${label}</button>`;
+            let html = '';
+            html += btn('<i class="fa-solid fa-chevron-right"></i>', libPage - 1, libPage === 1 ? 'dis' : '', 'صفحه قبل');
+            for (let p = 1; p <= total; p++) {
+                html += btn(p.toLocaleString('fa-IR'), p, p === libPage ? 'on' : '', 'صفحه ' + p);
+            }
+            html += btn('<i class="fa-solid fa-chevron-left"></i>', libPage + 1, libPage === total ? 'dis' : '', 'صفحه بعد');
+            box.innerHTML = html;
+        }
+
+        function goLibPage(p) {
+            if (p < 1) return;
+            libPage = p;
+            renderMangaGrid();
+            const g = document.getElementById('manga-grid');
+            if (g) window.scrollTo({ top: g.getBoundingClientRect().top + window.scrollY - 150, behavior: 'smooth' });
+        }
+
         function renderMangaGrid() {
             const grid = document.getElementById('manga-grid');
             const sortBy = document.getElementById('sort-select').value;
@@ -1666,6 +1698,7 @@ document.addEventListener('keydown', e => {
             document.getElementById('manga-count-number').textContent = filtered.length;
 
             if (filtered.length === 0) {
+                renderPager(0);
                 grid.innerHTML = `
                     <div class="col-span-full bg-navy-900/80 border border-blue-400/15 rounded-2xl p-10 text-center space-y-3">
                         <i class="fa-solid fa-book-open text-3xl text-blue-400/50"></i>
@@ -1675,6 +1708,13 @@ document.addEventListener('keydown', e => {
                 `;
                 return;
             }
+
+            // صفحه‌بندی: ۱۴ مانگا در هر صفحه
+            const totalPages = Math.max(1, Math.ceil(filtered.length / MANGA_PER_PAGE));
+            if (libPage > totalPages) libPage = totalPages;
+            if (libPage < 1) libPage = 1;
+            renderPager(totalPages);
+            filtered = filtered.slice((libPage - 1) * MANGA_PER_PAGE, libPage * MANGA_PER_PAGE);
 
             grid.innerHTML = filtered.map((manga, i) => {
                 const isBookmarked = bookmarkedIds.includes(manga.id);
@@ -1705,7 +1745,7 @@ document.addEventListener('keydown', e => {
 
         function setGenreFilter(genre) {
             isBookmarkFilterActive = false;
-            currentGenreFilter = genre;
+            currentGenreFilter = genre; libPage = 1;
             document.querySelectorAll('.genre-btn').forEach(btn => {
                 if (btn.dataset.genre === genre) {
                     btn.className = 'genre-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-blue-600 text-white border border-white/30 transition';
@@ -1717,14 +1757,14 @@ document.addEventListener('keydown', e => {
         }
 
         function handleSearchInput(val) {
-            currentSearchQuery = val.trim();
+            currentSearchQuery = val.trim(); libPage = 1;
             showHomeView(false);
             renderMangaGrid();
         }
 
         function filterByBookmarks() {
             showHomeView(false);
-            isBookmarkFilterActive = !isBookmarkFilterActive;
+            isBookmarkFilterActive = !isBookmarkFilterActive; libPage = 1;
             renderMangaGrid();
             showToast(isBookmarkFilterActive ? 'نمایش مانگاهای نشان‌شده شما' : 'نمایش تمام مانگاهای کتابخانه');
         }
@@ -2170,6 +2210,8 @@ document.addEventListener('keydown', e => {
                 [50, '690px', 0, 4.2], [50, '810px', 0, 3.2], [50, '930px', 0, 4.6], [50, '1050px', 0, 3.4],
                 [50, '260px', -14, 3.6], [50, '640px', 12, 3.8], [50, '900px', -10, 3.4]
             ];
+            // ادامه‌ی ردیف‌ها تا پایین کتابخانه (بخش خارج از صفحه خودش بریده می‌شود)
+            for (let y = 1200, k = 0; y <= 4200; y += 240, k++) cfg.push([50, y + 'px', k % 3 === 0 ? 0 : (k % 3 === 1 ? -8 : 8), 3.2 + (k % 4) * .5]);
             const rows = cfg.map(([x, y, ang, sz], i) => {
                 const a = pick(26 + (i % 4)).map(w => `<span>${w}</span>`).join('');
                 return `<div class="gl-wrap" style="--x:${x}%;--y:${typeof y === 'string' ? y : y + '%'};--a:${ang}deg"><div class="gl-row ${i % 2 ? 'r' : ''} ${i % 3 === 0 ? 'f' : ''}" style="font-size:${sz}rem;animation-duration:${55 + i * 9}s">${a}${a}</div></div>`;
