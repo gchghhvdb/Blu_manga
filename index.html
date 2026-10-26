@@ -6,7 +6,22 @@
     <title>بلو مانگا | مرجع مطالعه آنلاین مانگا با تم آبی دارک</title>
     
     <!-- بارگذاری Tailwind CSS -->
-    
+    <!--TW-CDN-START--><script src="https://cdn.tailwindcss.com" onerror="window.__twFailed=1"></script>
+    <script>
+        /* پشتیبان: اگر cdn.tailwindcss.com لود نشد (فیلتر/تحریم/مرورگر قدیمی)، Tailwind را از jsDelivr بگیر */
+        (function(){
+            if (typeof window.tailwind !== 'undefined') return;
+            var st = document.createElement('style');
+            st.type = 'text/tailwindcss';
+            st.textContent = '@theme{--font-sans:"Vazirmatn",sans-serif;--font-display:"Lalezar",cursive;--font-jp:"Noto Serif JP",serif;'
+              + '--color-navy-950:#01040d;--color-navy-900:#030a1f;--color-navy-850:#061231;--color-navy-800:#0a1c4d;'
+              + '--color-navy-700:#12307a;--color-navy-600:#1e4fc4;--color-navy-500:#3b82f6;--color-navy-400:#60a5fa;}';
+            document.head.appendChild(st);
+            var s = document.createElement('script');
+            s.src = 'https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.1.11';
+            document.head.appendChild(s);
+        })();
+    </script><!--TW-CDN-END-->
     
     <!-- فونت‌های فارسی وزیرمتن، لاله‌زار و فونت ژاپنی -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -15,9 +30,36 @@
     <noscript><link href="https://fonts.googleapis.com/css2?family=Lalezar&family=Noto+Serif+JP:wght@600;900&family=Vazirmatn:wght@300;400;500;700;900&display=swap" rel="stylesheet"></noscript>
     
     <!-- آیکون‌های FontAwesome -->
-    <link rel="stylesheet" href="fa/css/all.min.css">
+    <!--FA-START--><link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"></noscript><!--FA-END-->
 
-    
+    <!--TW-CFG-START--><script>
+        window.tailwind = window.tailwind || {};
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Vazirmatn', 'sans-serif'],
+                        display: ['Lalezar', 'cursive'],
+                        jp: ['"Noto Serif JP"', 'serif']
+                    },
+                    colors: {
+                        navy: {
+                            950: '#01040d', /* آبی خیلی تیره - پس‌زمینه اصلی */
+                            900: '#030a1f', /* دارک آبی لایه دوم */
+                            850: '#061231', /* کارت‌های سرمه‌ای تیره */
+                            800: '#0a1c4d', /* هاور کارت‌ها و پنل‌ها */
+                            700: '#12307a', /* حاشیه‌ها و دکمه‌های فرعی */
+                            600: '#1e4fc4',
+                            500: '#3b82f6', /* آبی الکتریک ملایم */
+                            400: '#60a5fa',
+                        }
+                    }
+                }
+            }
+        }
+    </script><!--TW-CFG-END-->
 
     <style>
         /* ===== CSS اضطراری: وقتی Tailwind لود نشود، صفحه نباید خراب شود (specificity صفر؛ اگر Tailwind بود، او برنده است) ===== */
@@ -684,7 +726,6 @@
             #manga-grid .m-card .rank { font-size: 1.6rem !important; }
         }
     </style>
-    <link rel="stylesheet" href="tailwind.css">
 </head>
 <body class="selection:bg-blue-600 selection:text-white">
 
@@ -693,48 +734,77 @@
         <div id="scroll-bar" class="h-full bg-gradient-to-l from-blue-500 via-sky-400 to-white/90 w-0 transition-all duration-75"></div>
     </div>
 
-    <!-- هدر و منوی ناوبری اصلی -->
+    <!-- ========================================== -->
+    <!-- هدر شناور نسل جدید (Floating Island Header) -->
+    <!-- ========================================== -->
     <header id="site-header" class="fixed top-3 inset-x-3 z-40 mx-auto max-w-7xl rounded-2xl glass">
-        <div class="px-4 sm:px-5 h-14 flex items-center justify-between gap-4">
+        <div class="px-3.5 sm:px-5 h-14 flex items-center justify-between gap-3">
             
             <!-- لوگو -->
             <a href="#" onclick="showHomeView()" class="flex items-center gap-3 group shrink-0">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-navy-800 border border-white/20 flex items-center justify-center text-white font-jp font-black text-xl shadow-lg shadow-blue-900/40 group-hover:border-white transition">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-navy-800 border border-white/25 flex items-center justify-center text-white font-jp font-black text-xl shadow-lg shadow-blue-900/40 group-hover:scale-105 transition">
                     青
                 </div>
                 <div>
-                    <span class="font-display text-2xl text-white tracking-wide block leading-none">بلو مانگا</span>
-                    <span class="text-[10px] text-blue-300/70">مرجع مطالعه آنلاین مانگا</span>
+                    <div class="flex items-center gap-1.5">
+                        <span class="font-display text-2xl text-white tracking-wide block leading-none">بلو مانگا</span>
+                        <span class="px-1.5 py-0.5 text-[9px] font-bold rounded-md bg-blue-500/20 border border-blue-400/30 text-sky-300 hidden sm:inline">PRO</span>
+                    </div>
+                    <span class="text-[10px] text-blue-300/70 block">مرجع مطالعه آنلاین مانگا</span>
                 </div>
             </a>
 
-            <!-- لینک‌های منو -->
-            <nav class="hidden lg:flex items-center gap-7 text-sm font-medium text-blue-100/80">
+            <!-- لینک‌های منو دسکتاپ -->
+            <nav class="hidden lg:flex items-center gap-6 text-xs sm:text-sm font-medium text-blue-100/85">
                 <button onclick="showHomeView()" class="hover:text-white transition flex items-center gap-1.5">
                     <i class="fa-solid fa-house text-blue-400 text-xs"></i>
                     <span>صفحه اصلی</span>
                 </button>
-                <a href="#manga-library-section" onclick="showHomeView()" class="hover:text-white transition flex items-center gap-1.5">
+                <a href="#manga-library-section" onclick="showHomeView(false)" class="hover:text-white transition flex items-center gap-1.5">
                     <i class="fa-solid fa-book-open text-blue-400 text-xs"></i>
                     <span>کتابخانه</span>
                 </a>
+                <button onclick="openRandomManga()" class="hover:text-white transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-dice text-sky-400 text-xs"></i>
+                    <span>مانگای شانسی!</span>
+                </button>
                 <button onclick="filterByBookmarks()" class="hover:text-white transition flex items-center gap-1.5">
                     <i class="fa-regular fa-bookmark text-blue-400 text-xs"></i>
                     <span>لیست مطالعه من</span>
-                    <span id="bookmark-count-badge" class="px-1.5 py-0.5 text-[10px] rounded-full bg-navy-700 text-white">0</span>
+                    <span id="bookmark-count-badge" class="px-1.5 py-0.5 text-[10px] rounded-full bg-blue-600 text-white font-bold">0</span>
                 </button>
-                <a href="#quotes-and-topics" onclick="showHomeView()" class="hover:text-white transition flex items-center gap-1.5">
+                <a href="#quotes-and-topics" onclick="showHomeView(false)" class="hover:text-white transition flex items-center gap-1.5">
                     <i class="fa-solid fa-quote-right text-blue-400 text-xs"></i>
                     <span>دیالوگ‌ها</span>
                 </a>
             </nav>
 
-            <!-- جستجو و دکمه افزودن مانگای جدید -->
-            <div class="flex items-center gap-2.5">
-                <div class="relative hidden sm:block w-52 md:w-64">
-                    <input id="global-search-input" oninput="handleSearchInput(this.value)" type="text" placeholder="جستجوی مانگا یا نویسنده   ( / )" class="w-full bg-navy-900/90 border border-blue-400/20 focus:border-white/60 rounded-xl px-3.5 py-2 pr-9 text-xs text-white placeholder-blue-200/40 focus:outline-none transition">
+            <!-- ابزارهای سریع هدر: جستجوی اسپات‌لایت + تم + افزودن مانگا -->
+            <div class="flex items-center gap-2">
+                <!-- ورودی جستجوی سریع دسکتاپ -->
+                <div class="relative hidden md:block w-52 lg:w-60">
+                    <input id="global-search-input" oninput="handleSearchInput(this.value)" type="text" placeholder="جستجوی سریع مانگا..." class="w-full bg-navy-900/90 border border-blue-400/20 focus:border-white/60 rounded-xl px-3.5 py-2 pr-9 pl-12 text-xs text-white placeholder-blue-200/40 focus:outline-none transition">
                     <i class="fa-solid fa-magnifying-glass absolute right-3 top-2.5 text-blue-400/60 text-xs"></i>
+                    <button onclick="openCommandPalette()" title="پالت جستجوی پیشرفته (Ctrl+K)" class="absolute left-2 top-1.5 px-1.5 py-0.5 rounded bg-white/10 hover:bg-white/20 text-[10px] text-blue-200 font-mono transition" dir="ltr">⌘K</button>
                 </div>
+
+                <!-- دکمه پالت فرمان موبایل/تبلت -->
+                <button onclick="openCommandPalette()" title="جستجوی پیشرفته (Ctrl+K)" class="md:hidden w-9 h-9 rounded-xl chip hover:bg-white/15 text-blue-200 flex items-center justify-center transition">
+                    <i class="fa-solid fa-magnifying-glass text-xs"></i>
+                </button>
+
+                <!-- تغییر رنگ نئون تم -->
+                <div class="relative">
+                    <button onclick="cycleAccentTheme()" title="تغییر تم نوری سایت" class="w-9 h-9 rounded-xl chip hover:bg-white/15 text-blue-200 flex items-center justify-center transition">
+                        <i class="fa-solid fa-palette text-xs"></i>
+                    </button>
+                </div>
+
+                <!-- دکمه افزودن مانگای جدید (استودیو مدیریت) -->
+                <button onclick="openAddMangaModal()" class="btn-primary px-3 sm:px-3.5 py-2 rounded-xl text-white text-xs font-bold flex items-center gap-1.5 shrink-0">
+                    <i class="fa-solid fa-plus text-[11px]"></i>
+                    <span class="hidden sm:inline">افزودن مانگا</span>
+                </button>
             </div>
         </div>
     </header>
@@ -744,12 +814,12 @@
     <!-- ========================================== -->
     <main id="home-view" class="pt-20 pb-20 lg:pb-0">
 
-        <!-- بخش اول: اسلایدر ویژه بالای صفحه (Hero Featured Manga) -->
-        <section id="hero-sec" style="position:relative;overflow:hidden" class="relative overflow-hidden border-b border-blue-400/15 bg-navy-950 py-10 sm:py-14">
+        <!-- بخش اول: اسلایدر ویژه بالای صفحه (Hero Featured Showcase) -->
+        <section id="hero-sec" style="position:relative;overflow:hidden" class="relative overflow-hidden border-b border-blue-400/15 bg-navy-950 py-8 sm:py-12">
             <!-- تصویر پس‌زمینه محو اسلایدر -->
             <div id="hero-bg-blur" class="absolute inset-0 bg-cover bg-center opacity-40 blur-xl scale-125 transition-all duration-700 pointer-events-none"></div>
             <div class="absolute inset-0 bg-gradient-to-t from-navy-950 via-navy-950/55 to-navy-950/25 pointer-events-none"></div>
-            <!-- الگوی نقطه‌ای مانگا + عنوان ژاپنی بزرگ -->
+            <!-- الگوی نقطه‌ای مانگا + دیوار کاورها -->
             <div id="hero-tint" aria-hidden="true"></div>
             <div id="lib-backdrop" aria-hidden="true"><div class="lb-in" id="lib-backdrop-in"></div></div>
             <span class="sfx a" aria-hidden="true">ドン</span><span class="sfx b" aria-hidden="true">ゴゴゴ</span>
@@ -761,85 +831,137 @@
                     <!-- محتوای اسلاید فعال توسط جاوااسکریپت رندر می‌شود -->
                 </div>
 
-                <!-- دکمه‌های تغییر اسلاید هیرو -->
-                <div class="flex items-center justify-between mt-8 pt-4 border-t border-blue-400/10">
-                    <div id="hero-dots" class="flex items-center gap-2"></div>
-                    <div class="flex items-center gap-2">
-                        <button onclick="changeHeroSlide(-1)" class="w-9 h-9 rounded-xl bg-navy-850 hover:bg-navy-700 border border-blue-400/20 text-white flex items-center justify-center transition">
-                            <i class="fa-solid fa-chevron-right text-xs"></i>
-                        </button>
-                        <button onclick="changeHeroSlide(1)" class="w-9 h-9 rounded-xl bg-navy-850 hover:bg-navy-700 border border-blue-400/20 text-white flex items-center justify-center transition">
-                            <i class="fa-solid fa-chevron-left text-xs"></i>
-                        </button>
+                <!-- نوار انتخاب سریع ۵ مانگای برگزیده + دکمه‌های ناوبری -->
+                <div class="flex flex-col sm:flex-row items-center justify-between gap-4 mt-8 pt-4 border-t border-blue-400/15">
+                    <div class="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-start">
+                        <div id="hero-dots" class="flex items-center gap-2"></div>
+                        <span class="text-[11px] text-blue-300/70 hidden md:inline">برای جابه‌جایی سریع روی کاورهای کوچک کلیک کنید</span>
+                    </div>
+
+                    <!-- داک مینیاتوری اسلایدهای ویژه -->
+                    <div class="flex items-center gap-2.5 w-full sm:w-auto justify-between sm:justify-end">
+                        <div id="hero-mini-dock" class="flex items-center gap-2 overflow-x-auto py-1"></div>
+                        <div class="flex items-center gap-1.5 shrink-0">
+                            <button onclick="changeHeroSlide(-1)" aria-label="اسلاید قبلی" class="w-9 h-9 rounded-xl bg-navy-850 hover:bg-navy-700 border border-blue-400/20 text-white flex items-center justify-center transition">
+                                <i class="fa-solid fa-chevron-right text-xs"></i>
+                            </button>
+                            <button onclick="changeHeroSlide(1)" aria-label="اسلاید بعدی" class="w-9 h-9 rounded-xl bg-navy-850 hover:bg-navy-700 border border-blue-400/20 text-white flex items-center justify-center transition">
+                                <i class="fa-solid fa-chevron-left text-xs"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
+        <!-- بخش دوم: کتابخانه کامل مانگاها + نوار ادامه مطالعه -->
+        <div class="lib-wrap">
+            <div class="lib-aurora" aria-hidden="true"><i></i><i></i><i></i></div>
+            <div id="glyph-video" aria-hidden="true"></div>
+            <div id="hero-glyphs" aria-hidden="true"><div class="gl-rot" id="gl-rot"></div></div>
 
-        <!-- بخش دوم: کتابخانه کامل مانگاها (۹۰٪ تمرکز سایت روی انتخاب و مطالعه مانگا) -->
-        <div class="lib-wrap"><div class="lib-aurora" aria-hidden="true"><i></i><i></i><i></i></div><div id="glyph-video" aria-hidden="true"></div><div id="hero-glyphs" aria-hidden="true"><div class="gl-rot" id="gl-rot"></div></div>
-        <section id="manga-library-section" style="position:relative;z-index:10" class="py-14 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-            
-            <!-- سرتیتر و ابزارهای فیلتر ژانر و مرتب‌سازی -->
-            <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6 border-b border-blue-400/15 pb-6">
-                <div>
-                    <div class="flex items-center gap-2 text-blue-400 text-xs font-bold">
-                        <i class="fa-solid fa-layer-group"></i>
-                        <span>کتابخانه</span>
+            <section id="manga-library-section" style="position:relative;z-index:10" class="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+                
+                <!-- نوار هوشمند «ادامه مطالعه» (در صورت وجود سابقه مطالعه نمایش داده می‌شود) -->
+                <div id="continue-reading-bar" class="hidden glass rounded-2xl p-4 sm:p-5 border border-blue-400/25"></div>
+
+                <!-- سرتیتر و ابزارهای فیلتر ژانر و تغییر نمای کارت‌ها -->
+                <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6 border-b border-blue-400/15 pb-6">
+                    <div>
+                        <div class="flex items-center gap-2 text-blue-400 text-xs font-bold">
+                            <i class="fa-solid fa-layer-group"></i>
+                            <span>کتابخانه جامع</span>
+                        </div>
+                        <h2 class="font-display text-3xl sm:text-4xl text-white mt-1">آرشیو مانگاهای سایت</h2>
+                        <p class="text-xs sm:text-sm text-blue-200/70 mt-1">
+                            یک اثر را انتخاب کن؛ اطلاعات، چپترخوان، گالری پنل‌ها و نظرات هر اثر یک‌جاست.
+                        </p>
                     </div>
-                    <h2 class="font-display text-3xl sm:text-4xl text-white mt-1">آرشیو مانگاهای سایت</h2>
-                    <p class="text-xs sm:text-sm text-blue-200/70 mt-1">
-                        یک اثر را انتخاب کن؛ اطلاعات، چپتر و نظرات هر اثر یک‌جاست.
-                    </p>
+
+                    <!-- فیلترهای ژانر -->
+                    <div class="flex flex-wrap items-center gap-2" id="genre-filter-buttons">
+                        <button onclick="setGenreFilter('all')" data-genre="all" class="genre-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-blue-600 text-white border border-white/30 transition">همه آثار</button>
+                        <button onclick="setGenreFilter('سینن')" data-genre="سینن" class="genre-btn px-3.5 py-2 rounded-xl text-xs font-medium bg-navy-850 text-blue-200 hover:bg-navy-800 border border-blue-400/15 transition">سینن (بزرگسال)</button>
+                        <button onclick="setGenreFilter('شونن')" data-genre="شونن" class="genre-btn px-3.5 py-2 rounded-xl text-xs font-medium bg-navy-850 text-blue-200 hover:bg-navy-800 border border-blue-400/15 transition">شونن (هیجانی)</button>
+                        <button onclick="setGenreFilter('تاریک و روانشناختی')" data-genre="تاریک و روانشناختی" class="genre-btn px-3.5 py-2 rounded-xl text-xs font-medium bg-navy-850 text-blue-200 hover:bg-navy-800 border border-blue-400/15 transition">تاریک و روانشناختی</button>
+                        <button onclick="setGenreFilter('اکشن و رزمی')" data-genre="اکشن و رزمی" class="genre-btn px-3.5 py-2 rounded-xl text-xs font-medium bg-navy-850 text-blue-200 hover:bg-navy-800 border border-blue-400/15 transition">اکشن و رزمی</button>
+                        <button onclick="setGenreFilter('ورزشی و درام')" data-genre="ورزشی و درام" class="genre-btn px-3.5 py-2 rounded-xl text-xs font-medium bg-navy-850 text-blue-200 hover:bg-navy-800 border border-blue-400/15 transition">ورزشی و درام</button>
+                    </div>
                 </div>
 
-                <!-- فیلترهای ژانر -->
-                <div class="flex flex-wrap items-center gap-2" id="genre-filter-buttons">
-                    <button onclick="setGenreFilter('all')" data-genre="all" class="genre-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-blue-600 text-white border border-white/30 transition">همه آثار</button>
-                    <button onclick="setGenreFilter('سینن')" data-genre="سینن" class="genre-btn px-3.5 py-2 rounded-xl text-xs font-medium bg-navy-850 text-blue-200 hover:bg-navy-800 border border-blue-400/15 transition">سینن (بزرگسال)</button>
-                    <button onclick="setGenreFilter('شونن')" data-genre="شونن" class="genre-btn px-3.5 py-2 rounded-xl text-xs font-medium bg-navy-850 text-blue-200 hover:bg-navy-800 border border-blue-400/15 transition">شونن (هیجانی)</button>
-                    <button onclick="setGenreFilter('تاریک و روانشناختی')" data-genre="تاریک و روانشناختی" class="genre-btn px-3.5 py-2 rounded-xl text-xs font-medium bg-navy-850 text-blue-200 hover:bg-navy-800 border border-blue-400/15 transition">تاریک و روانشناختی</button>
-                    <button onclick="setGenreFilter('اکشن و رزمی')" data-genre="اکشن و رزمی" class="genre-btn px-3.5 py-2 rounded-xl text-xs font-medium bg-navy-850 text-blue-200 hover:bg-navy-800 border border-blue-400/15 transition">اکشن و رزمی</button>
-                    <button onclick="setGenreFilter('ورزشی و درام')" data-genre="ورزشی و درام" class="genre-btn px-3.5 py-2 rounded-xl text-xs font-medium bg-navy-850 text-blue-200 hover:bg-navy-800 border border-blue-400/15 transition">ورزشی و درام</button>
-                </div>
-            </div>
+                <!-- نوار جستجوی موبایل، فیلتر وضعیت، مرتب‌سازی و سوییچر چیدمان -->
+                <div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
+                    <div class="burn w-full md:hidden">
+                        <i class="fa-solid fa-magnifying-glass absolute right-4 top-1/2 -translate-y-1/2 text-sky-300 text-sm z-[2] pointer-events-none"></i>
+                        <input oninput="handleSearchInput(this.value)" type="search" placeholder="جستجوی مانگا یا نویسنده..." aria-label="جستجوی مانگا" class="w-full rounded-2xl pr-11 pl-4 py-3.5 text-sm text-white placeholder-blue-200/50">
+                    </div>
 
-            <!-- نوار جستجوی موبایل و مرتب‌سازی -->
-            <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
-                <div class="burn w-full sm:hidden mt-3">
-                    <i class="fa-solid fa-magnifying-glass absolute right-4 top-1/2 -translate-y-1/2 text-sky-300 text-sm z-[2] pointer-events-none"></i>
-                    <input oninput="handleSearchInput(this.value)" type="search" placeholder="جستجوی مانگا یا نویسنده..." aria-label="جستجوی مانگا" class="w-full rounded-2xl pr-11 pl-4 py-3.5 text-sm text-white placeholder-blue-200/50">
-                </div>
-                <div class="text-xs text-blue-200/70">
-                    نمایش <span id="manga-count-number" class="text-white font-bold">15</span> مانگا در کتابخانه
-                </div>
-                <div class="flex items-center gap-2 text-xs">
-                    <span class="text-blue-300/70">مرتب‌سازی:</span>
-                    <select id="sort-select" onchange="libPage=1;renderMangaGrid()" class="bg-navy-850 border border-blue-400/25 text-white rounded-xl px-3 py-1.5 text-xs focus:outline-none">
-                        <option value="popular">محبوب‌ترین</option>
-                        <option value="rating">بالاترین امتیاز</option>
-                        
-                        <option value="newest">جدیدترین سال انتشار</option>
-                    </select>
-                </div>
-            </div>
+                    <div class="flex flex-wrap items-center gap-3 justify-between md:justify-start">
+                        <div class="text-xs text-blue-200/80 flex items-center gap-2">
+                            <span>نمایش <strong id="manga-count-number" class="text-white font-bold">20</strong> اثر</span>
+                            <span id="active-filter-pill" class="hidden px-2.5 py-1 rounded-lg bg-blue-600/30 border border-blue-400/30 text-[11px] text-sky-200 items-center gap-1.5">
+                                <span id="active-filter-text"></span>
+                                <button onclick="resetAllFilters()" class="hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+                            </span>
+                        </div>
 
-            <!-- گرید ۱۵ کارت مانگا با انیمیشن اسکرول -->
-            <div id="manga-grid" class="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-x-2.5 gap-y-5 sm:gap-x-5 sm:gap-y-8">
-                <!-- توسط جاوااسکریپت رندر می‌شود -->
-            </div>
-            <nav id="manga-pager" class="pager" aria-label="صفحه‌بندی کتابخانه"></nav>
-        </section></div>
+                        <!-- فیلتر وضعیت انتشار -->
+                        <div class="flex items-center gap-1 p-1 rounded-xl bg-navy-900/80 border border-blue-400/15 text-[11px]">
+                            <button onclick="setStatusFilter('all')" data-st="all" class="st-btn px-2.5 py-1 rounded-lg bg-blue-600 text-white font-bold transition">همه</button>
+                            <button onclick="setStatusFilter('ongoing')" data-st="ongoing" class="st-btn px-2.5 py-1 rounded-lg text-blue-200/75 hover:text-white transition">در حال انتشار</button>
+                            <button onclick="setStatusFilter('completed')" data-st="completed" class="st-btn px-2.5 py-1 rounded-lg text-blue-200/75 hover:text-white transition">پایان‌یافته</button>
+                        </div>
+                    </div>
 
-        <!-- بخش سوم (۱۰٪ کل سایت): نوار جمع‌وجور دیالوگ‌های ماندگار و موضوعات مانگا -->
+                    <div class="flex items-center justify-between sm:justify-end gap-2.5 text-xs">
+                        <!-- دکمه انتخاب شانسی -->
+                        <button onclick="openRandomManga()" class="px-3 py-2 rounded-xl chip hover:bg-white/15 text-sky-200 font-bold flex items-center gap-1.5 transition">
+                            <i class="fa-solid fa-shuffle text-sky-400"></i>
+                            <span>انتخاب شانسی</span>
+                        </button>
+
+                        <!-- مرتب‌سازی -->
+                        <div class="flex items-center gap-1.5">
+                            <span class="text-blue-300/70 hidden sm:inline">چیدمان:</span>
+                            <select id="sort-select" onchange="libPage=1;renderMangaGrid()" class="bg-navy-850 border border-blue-400/25 text-white rounded-xl px-3 py-2 text-xs focus:outline-none">
+                                <option value="popular">محبوب‌ترین</option>
+                                <option value="rating">بالاترین امتیاز</option>
+                                <option value="newest">جدیدترین سال انتشار</option>
+                                <option value="chapters">بیشترین چپتر</option>
+                            </select>
+                        </div>
+
+                        <!-- سوییچر نمای پوستری / نمای بنتو مشرح -->
+                        <div class="hidden sm:flex items-center p-1 rounded-xl bg-navy-900/90 border border-blue-400/20">
+                            <button id="view-btn-poster" onclick="setLibraryViewMode('poster')" title="نمای پوستری" class="w-8 h-7 rounded-lg bg-blue-600 text-white flex items-center justify-center transition">
+                                <i class="fa-solid fa-grip text-xs"></i>
+                            </button>
+                            <button id="view-btn-bento" onclick="setLibraryViewMode('bento')" title="نمای بنتو با جزئیات" class="w-8 h-7 rounded-lg text-blue-300/70 hover:text-white flex items-center justify-center transition">
+                                <i class="fa-solid fa-table-list text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- گرید کارت‌های مانگا -->
+                <div id="manga-grid" class="grid-poster grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-x-2.5 gap-y-5 sm:gap-x-5 sm:gap-y-8">
+                    <!-- توسط جاوااسکریپت رندر می‌شود -->
+                </div>
+                <nav id="manga-pager" class="pager" aria-label="صفحه‌بندی کتابخانه"></nav>
+            </section>
+        </div>
+
+        <!-- بخش سوم: نوار دیالوگ‌های ماندگار و کارت‌های دانشنامه مانگا -->
         <section id="quotes-and-topics" class="py-12 bg-navy-900/80 border-t border-blue-400/15">
             <span class="tate" aria-hidden="true">静寂の中で</span><span class="tate" aria-hidden="true">覚悟</span><span class="tate" aria-hidden="true">運命の絆</span><span class="tate" aria-hidden="true">約束</span>
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8" style="position:relative;z-index:1">
                 
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div>
-                        
+                        <span class="text-xs font-bold text-blue-400 flex items-center gap-1.5">
+                            <i class="fa-solid fa-sparkles"></i>
+                            <span>لحظات فراموش‌نشدنی دنیای مانگا (با کلیک، پنل را بزرگ ببینید)</span>
+                        </span>
                         <h3 class="font-display text-2xl sm:text-3xl text-white mt-0.5">دیالوگ‌های ماندگار</h3>
                     </div>
                     <div class="flex items-center gap-2">
@@ -888,11 +1010,11 @@
                     </div>
                     <div class="bg-navy-950/90 border border-blue-400/15 rounded-2xl p-4 space-y-1.5">
                         <div class="text-xs font-bold text-blue-400 flex items-center gap-1.5">
-                            <i class="fa-solid fa-cloud-arrow-up"></i>
-                            <span>قابلیت افزودن مانگای دلخواه</span>
+                            <i class="fa-solid fa-wand-magic-sparkles"></i>
+                            <span>جستجوی سریع و چپترخوان پرو</span>
                         </div>
                         <p class="text-xs text-blue-100/75 leading-relaxed">
-                            از طریق دکمه <strong>«+ افزودن مانگا جدید»</strong> در بالای سایت می‌توانید هر زمان کاور و اطلاعات اثر جدید را اضافه کنید.
+                            با فشردن <strong>Ctrl+K</strong> یا <strong>/</strong> در هر لحظه بین آثار جستجو کنید و در چپترخوان، حالت صفحه‌ای، اسکرول یا دوصفحه‌ای را تجربه کنید.
                         </p>
                     </div>
                 </div>
@@ -902,26 +1024,43 @@
     </main>
 
     <!-- ========================================================================= -->
-    <!-- نمای ۲: صفحه اختصاصی هر مانگا با ۳ تب (اطلاعات | چپتر | نظرات)             -->
+    <!-- نمای ۲: صفحه اختصاصی هر مانگا با ۴ تب (اطلاعات | چپتر | گالری پنل | نظرات) -->
     <!-- ========================================================================= -->
     <section id="manga-detail-view" class="hidden pt-16 pb-24 min-h-screen">
         <!-- بنر محو بالای صفحه مانگا -->
         <div class="relative overflow-hidden border-b border-blue-400/20 bg-navy-900/90">
             <div id="detail-bg-blur" class="absolute inset-0 bg-cover bg-center opacity-20 blur-2xl scale-110 pointer-events-none"></div>
-            <div class="absolute inset-0 bg-gradient-to-t from-navy-950 via-navy-950/85 to-navy-950/50 pointer-events-none"></div><div id="detail-panels" aria-hidden="true"><div class="dp-in" id="detail-panels-in"></div></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-navy-950 via-navy-950/85 to-navy-950/50 pointer-events-none"></div>
+            <div id="detail-panels" aria-hidden="true"><div class="dp-in" id="detail-panels-in"></div></div>
 
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
-                <!-- دکمه بازگشت به کتابخانه -->
-                <button onclick="showHomeView()" class="mb-6 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-navy-850 hover:bg-navy-700 border border-blue-400/25 text-xs font-bold text-white transition">
-                    <i class="fa-solid fa-arrow-right"></i>
-                    <span>بازگشت به کتابخانه مانگا</span>
-                </button>
+                <!-- نوار بالای صفحه جزئیات: بازگشت + اشتراک‌گذاری -->
+                <div class="flex items-center justify-between gap-3 mb-6">
+                    <button onclick="showHomeView()" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-navy-850 hover:bg-navy-700 border border-blue-400/25 text-xs font-bold text-white transition">
+                        <i class="fa-solid fa-arrow-right"></i>
+                        <span>بازگشت به کتابخانه مانگا</span>
+                    </button>
+
+                    <div class="flex items-center gap-2">
+                        <button onclick="openRandomManga()" class="px-3.5 py-2 rounded-xl bg-navy-850 hover:bg-navy-700 border border-blue-400/20 text-xs text-blue-200 flex items-center gap-1.5 transition">
+                            <i class="fa-solid fa-dice text-sky-400"></i>
+                            <span class="hidden sm:inline">اثر تصادفی بعدی</span>
+                        </button>
+                        <button onclick="shareCurrentManga()" class="px-3.5 py-2 rounded-xl bg-navy-850 hover:bg-navy-700 border border-blue-400/20 text-xs text-blue-200 flex items-center gap-1.5 transition">
+                            <i class="fa-solid fa-share-nodes text-blue-400"></i>
+                            <span>معرفی اثر</span>
+                        </button>
+                    </div>
+                </div>
 
                 <!-- هدر مشخصات مانگا -->
                 <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
                     <div class="md:col-span-3 flex justify-center md:justify-start">
-                        <div class="w-52 sm:w-60 rounded-2xl overflow-hidden border-2 border-white/30 shadow-2xl shadow-blue-950">
+                        <div class="relative group w-52 sm:w-60 rounded-2xl overflow-hidden border-2 border-white/30 shadow-2xl shadow-blue-950">
                             <img id="detail-cover-img" src="" alt="Manga Cover" class="w-full h-80 object-cover">
+                            <button onclick="openLightbox(document.getElementById('detail-cover-img').src, document.getElementById('detail-title-fa').textContent)" class="absolute bottom-2.5 left-2.5 w-9 h-9 rounded-xl bg-black/65 backdrop-blur-md text-white hover:bg-blue-600 flex items-center justify-center opacity-0 group-hover:opacity-100 transition" title="بزرگ‌نمایی جلد">
+                                <i class="fa-solid fa-expand text-xs"></i>
+                            </button>
                         </div>
                     </div>
 
@@ -943,33 +1082,51 @@
 
                         <!-- دکمه‌های عملیاتی سریع -->
                         <div class="flex flex-wrap items-center gap-3 pt-3">
+                            <button onclick="startFirstOrSampleChapter()" class="btn-primary px-6 py-3 rounded-xl text-white font-bold text-xs sm:text-sm flex items-center gap-2">
+                                <i class="fa-solid fa-book-open-reader"></i>
+                                <span id="detail-read-cta-text">شروع مطالعه / پیش‌نمایش</span>
+                            </button>
+
                             <button id="detail-bookmark-btn" onclick="toggleBookmarkCurrent()" class="px-4 py-3 rounded-xl bg-navy-850 hover:bg-navy-700 text-blue-200 border border-blue-400/20 text-xs sm:text-sm transition flex items-center gap-2">
                                 <i class="fa-regular fa-bookmark"></i>
                                 <span>افزودن به لیست من</span>
                             </button>
+
+                            <!-- وضعیت مطالعه شخصی کاربر -->
+                            <select id="user-reading-status" onchange="saveUserReadingStatus(this.value)" class="bg-navy-850 border border-blue-400/25 text-blue-100 rounded-xl px-3.5 py-3 text-xs font-medium focus:outline-none">
+                                <option value="">📌 وضعیت مطالعه من...</option>
+                                <option value="reading">📖 در حال خواندن</option>
+                                <option value="plan">⏳ قصد خواندن دارم</option>
+                                <option value="completed">✅ کامل خوانده‌ام</option>
+                                <option value="onhold">⏸️ فعلاً متوقف</option>
+                            </select>
                         </div>
 
                         <!-- تیم مترجم -->
                         <div class="aw-credit" id="detail-credit">
-                            <span class="aw-burn"><img id="detail-credit-img" src="aw-manga.jpg" alt="" width="42" height="42" loading="lazy" decoding="async"></span>
+                            <span class="aw-burn"><img id="detail-credit-img" src="aw-manga.jpg" alt="" width="42" height="42" loading="lazy" decoding="async" onerror="this.src='https://placehold.co/84x84/1e4fc4/ffffff?text=AW'"></span>
                             <span class="t">توسط تیم <b dir="ltr" id="detail-credit-name">AW Manga</b> ترجمه شده</span>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- نوار ۳ تب اصلی: اطلاعات | چپتر | نظرات -->
+            <!-- نوار ۴ تب اصلی: اطلاعات | چپتر | گالری پنل‌ها | نظرات -->
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-                <div class="flex items-center gap-2 sm:gap-4 border-t border-blue-400/15 pt-3">
-                    <button id="tab-btn-info" onclick="switchDetailTab('info')" class="px-6 py-3.5 text-xs sm:text-sm font-bold border-b-2 border-white text-white bg-navy-800/60 rounded-t-xl transition flex items-center gap-2">
+                <div class="flex items-center gap-1.5 sm:gap-3 border-t border-blue-400/15 pt-3 overflow-x-auto">
+                    <button id="tab-btn-info" onclick="switchDetailTab('info')" class="px-5 sm:px-6 py-3.5 text-xs sm:text-sm font-bold border-b-2 border-white text-white bg-navy-800/60 rounded-t-xl transition flex items-center gap-2 shrink-0">
                         <i class="fa-solid fa-circle-info text-blue-400"></i>
                         <span>اطلاعات</span>
                     </button>
-                    <button id="tab-btn-chapters" onclick="switchDetailTab('chapters')" class="px-6 py-3.5 text-xs sm:text-sm font-bold border-b-2 border-transparent text-blue-300/70 hover:text-white rounded-t-xl transition flex items-center gap-2">
+                    <button id="tab-btn-chapters" onclick="switchDetailTab('chapters')" class="px-5 sm:px-6 py-3.5 text-xs sm:text-sm font-bold border-b-2 border-transparent text-blue-300/70 hover:text-white rounded-t-xl transition flex items-center gap-2 shrink-0">
                         <i class="fa-solid fa-layer-group text-blue-400"></i>
                         <span>چپتر</span>
                     </button>
-                    <button id="tab-btn-comments" onclick="switchDetailTab('comments')" class="px-6 py-3.5 text-xs sm:text-sm font-bold border-b-2 border-transparent text-blue-300/70 hover:text-white rounded-t-xl transition flex items-center gap-2">
+                    <button id="tab-btn-gallery" onclick="switchDetailTab('gallery')" class="px-5 sm:px-6 py-3.5 text-xs sm:text-sm font-bold border-b-2 border-transparent text-blue-300/70 hover:text-white rounded-t-xl transition flex items-center gap-2 shrink-0">
+                        <i class="fa-solid fa-images text-blue-400"></i>
+                        <span>گالری پنل‌ها</span>
+                    </button>
+                    <button id="tab-btn-comments" onclick="switchDetailTab('comments')" class="px-5 sm:px-6 py-3.5 text-xs sm:text-sm font-bold border-b-2 border-transparent text-blue-300/70 hover:text-white rounded-t-xl transition flex items-center gap-2 shrink-0">
                         <i class="fa-regular fa-comments text-blue-400"></i>
                         <span>نظرات</span>
                         <span id="tab-comments-count" class="px-2 py-0.5 text-[11px] rounded-full bg-navy-800 text-blue-200"></span>
@@ -978,7 +1135,7 @@
             </div>
         </div>
 
-        <!-- محتوای تب‌های سه‌گانه -->
+        <!-- محتوای تب‌های چهارگانه -->
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
             
             <!-- محتوای تب ۱: اطلاعات (INFO TAB) -->
@@ -1000,6 +1157,15 @@
                         </div>
                         <p id="detail-quote" class="text-white font-bold text-sm sm:text-base leading-relaxed"></p>
                     </div>
+
+                    <!-- پیشنهاد آثار مشابه هم‌ژانر -->
+                    <div class="bg-navy-900 border border-blue-400/15 rounded-2xl p-6 space-y-4">
+                        <h3 class="font-bold text-white text-base flex items-center gap-2">
+                            <i class="fa-solid fa-wand-magic-sparkles text-sky-400 text-sm"></i>
+                            <span>آثار مشابه که احتمالاً دوست خواهید داشت</span>
+                        </h3>
+                        <div id="similar-manga-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-3.5"></div>
+                    </div>
                 </div>
 
                 <!-- جدول مشخصات فنی مانگا -->
@@ -1013,11 +1179,15 @@
                             </div>
                             <div class="flex justify-between py-1.5 border-b border-blue-400/10">
                                 <span class="text-blue-300/70">طراح و نویسنده:</span>
-                                <span id="info-mangaka" class="text-white font-medium"></span>
+                                <span id="info-mangaka" class="text-white font-medium text-left"></span>
                             </div>
                             <div class="flex justify-between py-1.5 border-b border-blue-400/10">
                                 <span class="text-blue-300/70">مجله ناشر:</span>
-                                <span id="info-magazine" class="text-white font-medium"></span>
+                                <span id="info-magazine" class="text-white font-medium" dir="ltr"></span>
+                            </div>
+                            <div class="flex justify-between py-1.5 border-b border-blue-400/10">
+                                <span class="text-blue-300/70">تعداد چپترهای منتشرشده:</span>
+                                <span id="info-chapters-total" class="text-sky-300 font-bold"></span>
                             </div>
                             <div class="flex justify-between py-1.5">
                                 <span class="text-blue-300/70">رده سنی و سبک:</span>
@@ -1028,12 +1198,27 @@
                 </div>
             </div>
 
-            <!-- محتوای تب چپتر (فعلاً بدون چپتر) -->
+            <!-- محتوای تب ۲: چپترها (CHAPTERS TAB) -->
             <div id="tab-content-chapters" class="hidden">
                 <div id="chapters-list-container"></div>
             </div>
 
-            <!-- محتوای تب ۳: نظرات کاربران (COMMENTS TAB) -->
+            <!-- محتوای تب ۳: گالری پنل‌ها و صفحات نمونه (GALLERY TAB) -->
+            <div id="tab-content-gallery" class="hidden space-y-4">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 bg-navy-900 rounded-2xl p-4 border border-blue-400/15">
+                    <div>
+                        <h3 class="text-white font-bold text-sm sm:text-base">گالری پنل‌ها و هنر طراحی مانگا</h3>
+                        <p class="text-xs text-blue-200/70">برای مشاهده در ابعاد کامل یا شروع پیش‌نمایش در چپترخوان، روی هر پنل کلیک کنید.</p>
+                    </div>
+                    <button onclick="openSamplePreviewReader(activeMangaId)" class="btn-primary px-4 py-2.5 rounded-xl text-white text-xs font-bold flex items-center gap-2 self-start sm:self-auto">
+                        <i class="fa-solid fa-book-open"></i>
+                        <span>باز کردن در چپترخوان تمام‌صفحه</span>
+                    </button>
+                </div>
+                <div id="detail-gallery-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"></div>
+            </div>
+
+            <!-- محتوای تب ۴: نظرات کاربران (COMMENTS TAB) -->
             <div id="tab-content-comments" class="hidden grid grid-cols-1 lg:grid-cols-12 gap-8">
                 
                 <!-- فرم ثبت نظر جدید -->
@@ -1071,7 +1256,7 @@
                                 <span>این نظر حاوی اسپویل (لو رفتن داستان) است</span>
                             </label>
 
-                            <button onclick="submitMangaComment()" class="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs border border-white/20 shadow-lg transition">
+                            <button onclick="submitMangaComment()" class="w-full py-3 rounded-xl btn-primary text-white font-bold text-xs shadow-lg transition">
                                 ارسال و انتشار دیدگاه
                             </button>
                         </div>
@@ -1088,9 +1273,40 @@
     </section>
 
     <!-- ========================================================================= -->
+    <!-- مودال پالت فرمان و جستجوی اسپات‌لایت (Ctrl+K / Command Palette)           -->
+    <!-- ========================================================================= -->
+    <div id="command-palette-modal" onclick="if(event.target===this)closeCommandPalette()" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden items-start justify-center pt-16 sm:pt-24 p-4">
+        <div class="glass rounded-3xl max-w-2xl w-full overflow-hidden border border-blue-400/30 shadow-2xl">
+            <div class="p-4 border-b border-white/10 flex items-center gap-3">
+                <i class="fa-solid fa-magnifying-glass text-sky-400 text-sm"></i>
+                <input id="cmd-palette-input" oninput="renderCommandPaletteResults(this.value)" type="text" placeholder="نام فارسی، انگلیسی، نویسنده یا ژانر مانگا را بنویسید..." class="w-full bg-transparent! border-0! text-white text-sm focus:ring-0! focus:shadow-none! placeholder-blue-200/50">
+                <button onclick="closeCommandPalette()" class="px-2.5 py-1 rounded-lg bg-white/10 text-[11px] text-blue-200 hover:text-white">ESC</button>
+            </div>
+            <div id="cmd-palette-results" class="max-h-[65vh] overflow-y-auto p-3 space-y-1.5"></div>
+            <div class="px-4 py-2.5 bg-navy-950/80 border-t border-white/10 flex items-center justify-between text-[11px] text-blue-300/70">
+                <span>میانبر سریع: کلید <kbd class="px-1.5 py-0.5 rounded bg-white/10 text-white">/</kbd> یا <kbd class="px-1.5 py-0.5 rounded bg-white/10 text-white">Ctrl+K</kbd></span>
+                <button onclick="closeCommandPalette();openRandomManga()" class="text-sky-300 hover:underline flex items-center gap-1"><i class="fa-solid fa-dice"></i>انتخاب شانسی</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- مودال لایت‌باکس نمایش بزرگ پنل‌ها و کاورها                                 -->
+    <!-- ========================================================================= -->
+    <div id="lightbox-modal" onclick="if(event.target===this)closeLightbox()" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-md hidden items-center justify-center p-4">
+        <div class="relative max-w-3xl w-full flex flex-col items-center gap-3">
+            <button onclick="closeLightbox()" class="self-end w-10 h-10 rounded-full bg-white/15 hover:bg-blue-600 text-white flex items-center justify-center transition">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <img id="lightbox-img" src="" alt="" class="max-h-[80vh] w-auto rounded-2xl border border-white/20 shadow-2xl object-contain bg-navy-950">
+            <p id="lightbox-caption" class="text-xs sm:text-sm text-blue-100 font-bold text-center px-4"></p>
+        </div>
+    </div>
+
+    <!-- ========================================================================= -->
     <!-- مودال افزودن مانگای جدید توسط خود کاربر (CMS / ADMIN STUDIO)             -->
     <!-- ========================================================================= -->
-    <div id="add-manga-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden items-center justify-center p-4">
+    <div id="add-manga-modal" onclick="if(event.target===this)closeAddMangaModal()" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden items-center justify-center p-4">
         <div class="bg-navy-900 border border-blue-400/30 rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 sm:p-8 space-y-6 shadow-2xl">
             <div class="flex items-center justify-between border-b border-blue-400/15 pb-4">
                 <div>
@@ -1150,7 +1366,7 @@
                     <i class="fa-solid fa-code"></i>
                     <span>کپی کد JSON کل مانگاها (برای قرار دادن دائمی در سورس)</span>
                 </button>
-                <button onclick="saveNewMangaFromModal()" class="px-6 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs border border-white/25 shadow-lg transition">
+                <button onclick="saveNewMangaFromModal()" class="px-6 py-2.5 rounded-xl btn-primary text-white font-bold text-xs shadow-lg transition">
                     ذخیره و نمایش در کتابخانه
                 </button>
             </div>
@@ -1158,64 +1374,94 @@
     </div>
 
     <!-- پیغام شناور (Toast) -->
-    <div id="toast-box" class="fixed bottom-24 lg:bottom-5 left-5 z-50 bg-blue-600 border border-white/30 text-white px-5 py-3 rounded-xl shadow-2xl text-xs font-bold transform translate-y-24 opacity-0 transition-all duration-300 flex items-center gap-2">
-        <i class="fa-solid fa-circle-check"></i>
+    <div id="toast-box" class="fixed bottom-24 lg:bottom-5 left-5 z-50 bg-blue-600 border border-white/30 text-white px-5 py-3 rounded-xl shadow-2xl text-xs font-bold transform translate-y-24 opacity-0 transition-all duration-300 flex items-center gap-2 pointer-events-none">
+        <i class="fa-solid fa-circle-check text-sky-300"></i>
         <span id="toast-text">عملیات انجام شد</span>
     </div>
 
-    
+    <!-- ناوبری پایین موبایل -->
     <nav class="tabbar fixed bottom-3 inset-x-3 z-40 lg:hidden glass rounded-2xl flex px-2" aria-label="ناوبری">
         <button onclick="showHomeView()"><i class="fa-solid fa-house"></i><span>خانه</span></button>
         <a href="#manga-library-section" onclick="showHomeView(false)"><i class="fa-solid fa-book-open"></i><span>کتابخانه</span></a>
+        <button onclick="openCommandPalette()"><i class="fa-solid fa-magnifying-glass"></i><span>جستجو</span></button>
+        <button onclick="openRandomManga()"><i class="fa-solid fa-dice"></i><span>شانسی</span></button>
         <button onclick="filterByBookmarks()"><i class="fa-regular fa-bookmark"></i><span>لیست من</span></button>
     </nav>
 
     <!-- فوتر -->
-    <footer class="bg-navy-950 border-t border-blue-400/15 py-8 text-center text-xs text-blue-300/60">
+    <footer class="bg-navy-950 border-t border-blue-400/15 py-10 text-center text-xs text-blue-300/60">
         <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div class="flex items-center gap-2">
-                <span class="w-6 h-6 rounded-lg bg-blue-600 text-white font-jp font-bold flex items-center justify-center">青</span>
-                <span class="text-white font-bold">بلو مانگا</span>
-                <span>— پلتفرم اختصاصی مطالعه آنلاین مانگا</span>
+            <div class="flex items-center gap-2.5">
+                <span class="w-7 h-7 rounded-lg bg-blue-600 text-white font-jp font-bold flex items-center justify-center shadow">青</span>
+                <span class="text-white font-bold text-sm">بلو مانگا</span>
+                <span>— پلتفرم نسل جدید مطالعه آنلاین مانگا</span>
             </div>
-            <div>
-                <span>افزودن مانگای جدید + ذخیره خودکار نظرات</span>
+            <div class="flex flex-wrap items-center justify-center gap-4 text-[11px]">
+                <button onclick="openCommandPalette()" class="hover:text-white transition">جستجوی سریع (Ctrl+K)</button>
+                <span>•</span>
+                <button onclick="openAddMangaModal()" class="hover:text-white transition">افزودن مانگای دلخواه</button>
+                <span>•</span>
+                <button onclick="cycleAccentTheme()" class="hover:text-white transition">تغییر تم رنگی</button>
             </div>
         </div>
     </footer>
 
+    <!-- فایل‌های خارجی جلدها و پنل‌ها -->
     <script src="covers.js?v=1"></script>
     <script src="panels.js?v=1"></script>
+
     <script>
         // =========================================================================
-        // ۱. بانک اطلاعاتی ۱۵ مانگای آپلودشده توسط کاربر + ۱۰ پنل سیاه‌وسفید چپترخوان
+        // ۰. پشتیبان هوشمند تصاویر در صورت باز شدن بدون فایل‌های جانبی در پیش‌نمایش
         // =========================================================================
-        // جلدها در covers.js
-        const cv = c => IMG[c] || c;
+        window.IMG = window.IMG || {};
+        window.PANEL_SETS = window.PANEL_SETS || {};
 
-        // =========================================================================
-        // چپترها: آدرس پایه فضای ذخیره‌سازی + لیست چپترهای هر مانگا
-        // ساختار فایل‌ها روی آروان:  CHAPTER_BASE + slug + '/' + شماره‌چپتر + '/' + 001.webp ...
-        // مثال: https://mahdiggff2.s3.ir-central1.arvanstorage.ir/chainsaw-man/1/001.webp
-        // برای هر چپتر جدید: عکس‌ها را (با کلید «نمایش عمومی» روشن) آپلود کن و یک خط به chapters اضافه کن.
-        //   chapters: { 1: 24 }  یعنی چپتر ۱ با ۲۴ صفحه (001 تا 024)
-        //   یا لیست دقیق نام فایل‌ها: { 1: ['a.png', 'b.png'] }  (نسبت به CHAPTER_BASE)
-        // کلید هر مانگا = id همان مانگا در initialMangaList
-        // =========================================================================
-        const CHAPTER_BASE = 'https://mahdiggff2.s3.ir-central1.arvanstorage.ir/';
-        const MANGA_CHAPTERS = {
-        };
-        function chapterPages(mangaId, num) {
-            const cfg = MANGA_CHAPTERS[mangaId];
-            if (!cfg || !cfg.chapters[num]) return null;
-            const v = cfg.chapters[num];
-            if (Array.isArray(v)) return v.map(f => /^https?:/.test(f) ? f : CHAPTER_BASE + f);
-            const ext = cfg.ext || 'webp';
-            return Array.from({ length: v }, (_, i) =>
-                `${CHAPTER_BASE}${cfg.slug}/${num}/${String(i + 1).padStart(3, '0')}.${ext}`);
+        function makeFallbackSvgCover(titleEn, jpTitle, seedColor) {
+            const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 600" width="400" height="600">
+                <defs>
+                    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0%" stop-color="${seedColor}"/>
+                        <stop offset="55%" stop-color="#071330"/>
+                        <stop offset="100%" stop-color="#020612"/>
+                    </linearGradient>
+                </defs>
+                <rect width="400" height="600" fill="url(#g)"/>
+                <circle cx="320" cy="110" r="140" fill="rgba(255,255,255,0.06)"/>
+                <text x="200" y="250" text-anchor="middle" fill="rgba(255,255,255,0.13)" font-size="92" font-weight="900" font-family="serif">${jpTitle || '漫画'}</text>
+                <text x="200" y="480" text-anchor="middle" fill="#ffffff" font-size="26" font-weight="800" font-family="sans-serif">${titleEn || 'MANGA'}</text>
+                <rect x="24" y="24" width="352" height="552" rx="18" fill="none" stroke="rgba(255,255,255,0.22)" stroke-width="2"/>
+            </svg>`;
+            return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
         }
 
-        // لیست چپترها از فایل chapters.json داخل صندوقچه خوانده می‌شود (پنل admin.html آن را به‌روز می‌کند)
+        const cv = c => (window.IMG && window.IMG[c]) ? window.IMG[c] : c;
+
+        // =========================================================================
+        // ۱. تنظیمات فضای ابری آروان و چپترها (حفظ ۱۰۰٪ ساختار قبلی + چپتر نمونه داخلی)
+        // =========================================================================
+        const CHAPTER_BASE = 'https://mahdiggff2.s3.ir-central1.arvanstorage.ir/';
+        const MANGA_CHAPTERS = {};
+
+        function chapterPages(mangaId, num) {
+            const cfg = MANGA_CHAPTERS[mangaId];
+            if (cfg && cfg.chapters && cfg.chapters[num]) {
+                const v = cfg.chapters[num];
+                if (Array.isArray(v)) return v.map(f => /^https?:/.test(f) ? f : CHAPTER_BASE + f);
+                const ext = cfg.ext || 'webp';
+                return Array.from({ length: v }, (_, i) =>
+                    `${CHAPTER_BASE}${cfg.slug}/${num}/${String(i + 1).padStart(3, '0')}.${ext}`);
+            }
+            // اگر چپتر پیش‌نمایش داخلی (num === 0) فراخوانی شد:
+            if (num === 0) {
+                const m = mangaDatabase.find(x => x.id === mangaId);
+                const raw = (m && m.samplePages && m.samplePages.length) ? [...m.samplePages, ...defaultReadingPages.slice(0, 6)] : defaultReadingPages;
+                return raw.map(p => cv(p));
+            }
+            return null;
+        }
+
+        // دریافت خودکار لیست چپترها از آروان
         (function () {
             fetch(CHAPTER_BASE + 'chapters.json?t=' + Date.now()).then(r => r.ok ? r.json() : null).then(j => {
                 if (!j) return;
@@ -1223,174 +1469,326 @@
                 try { renderChaptersList(); } catch (e) {}
             }).catch(() => {});
         })();
-        // ---------- لیست چپترها در تب «چپتر» ----------
+
+        // ---------- رندر لیست چپترها در تب «چپتر» با جستجوی سریع و نشانگر مطالعه ----------
+        let chapterSearchFilter = '';
         function renderChaptersList() {
             const box = document.getElementById('chapters-list-container');
             if (!box) return;
             const cfg = MANGA_CHAPTERS[activeMangaId];
-            if (!cfg || !Object.keys(cfg.chapters).length) {
+            const readHistory = getReadChaptersMap();
+            const readSet = new Set(readHistory[activeMangaId] || []);
+
+            if (!cfg || !cfg.chapters || !Object.keys(cfg.chapters).length) {
                 box.innerHTML = `
-                    <div class="rounded-2xl bg-navy-900 p-10 text-center space-y-3">
-                        <i class="fa-solid fa-layer-group text-3xl text-blue-400/60"></i>
-                        <p class="text-white font-bold text-base">هنوز چپتری اضافه نشده</p>
-                        <p class="text-xs text-blue-200/70">چپترهای این مانگا بعد از انتشار اینجا نمایش داده می‌شوند.</p>
+                    <div class="rounded-2xl bg-navy-900 p-8 sm:p-10 text-center space-y-4 border border-blue-400/15">
+                        <div class="w-16 h-16 rounded-2xl bg-blue-600/20 border border-blue-400/30 flex items-center justify-center mx-auto text-sky-400 text-2xl">
+                            <i class="fa-solid fa-book-open-reader"></i>
+                        </div>
+                        <div class="space-y-1">
+                            <p class="text-white font-bold text-base sm:text-lg">چپترهای رسمی در حال آماده‌سازی هستند</p>
+                            <p class="text-xs text-blue-200/70 max-w-md mx-auto leading-relaxed">
+                                تا زمان بارگذاری چپترهای کامل روی سرور، می‌توانید <strong>چپتر پیش‌نمایش و صفحات نمونه</strong> این اثر را در چپترخوان تمام‌صفحه امتحان کنید.
+                            </p>
+                        </div>
+                        <div class="pt-2 flex justify-center">
+                            <button onclick="openReader(${activeMangaId}, 0)" class="btn-primary px-6 py-3 rounded-xl text-white font-bold text-xs sm:text-sm flex items-center gap-2">
+                                <i class="fa-solid fa-play"></i>
+                                <span>مطالعه چپتر پیش‌نمایش (صفحات نمونه)</span>
+                            </button>
+                        </div>
                     </div>`;
                 return;
             }
-            const nums = Object.keys(cfg.chapters).map(Number).sort((a, b) => isChapterDescending ? b - a : a - b);
+
+            let nums = Object.keys(cfg.chapters).map(Number).sort((a, b) => isChapterDescending ? b - a : a - b);
+            if (chapterSearchFilter.trim()) {
+                const q = chapterSearchFilter.trim();
+                nums = nums.filter(n => String(n).includes(q) || (cfg.titles && cfg.titles[n] && cfg.titles[n].includes(q)));
+            }
+
             box.innerHTML = `
-                <div class="flex items-center justify-between mb-3">
-                    <span class="text-xs text-blue-200/80">${nums.length} چپتر</span>
-                    <button onclick="isChapterDescending=!isChapterDescending;renderChaptersList()" class="px-3 py-1.5 rounded-lg bg-navy-850 border border-blue-400/20 text-xs text-blue-200 flex items-center gap-1.5">
-                        <i class="fa-solid fa-arrow-down-wide-short"></i><span>${isChapterDescending ? 'جدیدترین' : 'قدیمی‌ترین'}</span>
-                    </button>
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+                    <div class="flex items-center gap-3">
+                        <span class="text-xs text-blue-200/80 font-bold">${nums.length} چپتر در دسترس</span>
+                        <button onclick="openReader(${activeMangaId}, 0)" class="text-xs text-sky-300 hover:underline flex items-center gap-1">
+                            <i class="fa-regular fa-eye"></i><span>پیش‌نمایش صفحات نمونه</span>
+                        </button>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <input oninput="chapterSearchFilter=this.value;renderChaptersList()" value="${chapterSearchFilter}" type="text" placeholder="جستجوی شماره چپتر..." class="bg-navy-900 border border-blue-400/20 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none w-44">
+                        <button onclick="isChapterDescending=!isChapterDescending;renderChaptersList()" class="px-3.5 py-1.5 rounded-xl bg-navy-850 border border-blue-400/20 text-xs text-blue-200 flex items-center gap-1.5 shrink-0">
+                            <i class="fa-solid fa-arrow-down-wide-short"></i><span>${isChapterDescending ? 'جدیدترین' : 'قدیمی‌ترین'}</span>
+                        </button>
+                    </div>
                 </div>
-                <div class="space-y-2">
-                    ${nums.map(n => `
-                        <button onclick="openReader(${activeMangaId}, ${n})" class="w-full text-right bg-navy-900 hover:bg-navy-800 border border-blue-400/15 hover:border-blue-300/40 rounded-xl px-4 py-3.5 flex items-center justify-between transition">
-                            <span class="text-sm font-bold text-white">چپتر ${n}${cfg.titles && cfg.titles[n] ? ' — ' + cfg.titles[n] : ''}</span>
-                            <span class="text-xs text-blue-300/80 flex items-center gap-1.5"><i class="fa-solid fa-book-open"></i>مطالعه</span>
-                        </button>`).join('')}
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                    ${nums.map(n => {
+                        const isRead = readSet.has(n);
+                        return `
+                        <button onclick="openReader(${activeMangaId}, ${n})" class="w-full text-right bg-navy-900 hover:bg-navy-800 border ${isRead ? 'border-emerald-400/30 opacity-80' : 'border-blue-400/15'} hover:border-blue-300/40 rounded-xl px-4 py-3.5 flex items-center justify-between transition group">
+                            <div class="flex items-center gap-2.5">
+                                <span class="w-2 h-2 rounded-full ${isRead ? 'bg-emerald-400' : 'bg-sky-400'}"></span>
+                                <span class="text-sm font-bold text-white">چپتر ${n}${cfg.titles && cfg.titles[n] ? ' — ' + cfg.titles[n] : ''}</span>
+                            </div>
+                            <span class="text-xs ${isRead ? 'text-emerald-300' : 'text-blue-300/80'} group-hover:text-white flex items-center gap-1.5">
+                                <i class="fa-solid ${isRead ? 'fa-check-double' : 'fa-book-open'}"></i>
+                                <span>${isRead ? 'خوانده‌شده' : 'مطالعه'}</span>
+                            </span>
+                        </button>`;
+                    }).join('')}
                 </div>`;
         }
 
-        // ---------- چپترخوان تمام‌صفحه (حالت صفحه‌ای راست‌به‌چپ + حالت اسکرول) ----------
-let crMode = (function () { try { return localStorage.getItem('crMode') || 'page'; } catch (e) { return 'page'; } })();
-let crPages = [], crIdx = 0, crBuilt = false;
-const crBtn = 'padding:8px 12px;border-radius:10px;background:rgba(255,255,255,.1);color:#fff;font-size:12px;white-space:nowrap';
-function ensureReaderOverlay() {
-    let o = document.getElementById('reader-overlay');
-    if (o) return o;
-    o = document.createElement('div');
-    o.id = 'reader-overlay';
-    o.style.cssText = 'display:none;position:fixed;inset:0;z-index:200;background:#000;flex-direction:column;height:100dvh';
-    o.innerHTML = `
-        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 10px;background:rgba(0,0,0,.92);border-bottom:1px solid rgba(255,255,255,.1)">
-            <button onclick="closeReader()" style="${crBtn}"><i class="fa-solid fa-xmark"></i> بستن</button>
-            <div style="min-width:0;text-align:center">
-                <div id="reader-title" style="color:#fff;font-size:12px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></div>
-                <div id="reader-counter" style="color:#9db4ff;font-size:11px;direction:ltr"></div>
-            </div>
-            <div style="display:flex;gap:6px">
-                <button id="reader-mode-btn" onclick="crToggleMode()" style="${crBtn}"></button>
-                <button onclick="readerStep(-1)" style="${crBtn}">قبلی</button>
-                <button onclick="readerStep(1)" style="${crBtn};background:#2563eb">بعدی</button>
-            </div>
-        </div>
-        <div style="height:3px;background:rgba(255,255,255,.1);direction:rtl"><div id="reader-bar" style="height:100%;width:0;background:#38bdf8;transition:width .15s"></div></div>
-        <div id="reader-body" style="flex:1;position:relative;overflow:hidden">
-            <div id="reader-page" style="position:absolute;inset:0;touch-action:pan-y">
-                <img id="reader-img" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;user-select:none;-webkit-user-drag:none">
-                <div id="reader-end" style="display:none;position:absolute;inset:0;flex-direction:column;align-items:center;justify-content:center;gap:12px;color:#fff;text-align:center">
-                    <div style="font-size:16px;font-weight:700">پایان چپتر</div>
-                    <button onclick="readerStep(1)" style="padding:12px 24px;border-radius:12px;background:#2563eb;color:#fff;font-size:14px">چپتر بعدی</button>
-                    <button onclick="readerStep(-1)" style="padding:12px 24px;border-radius:12px;background:rgba(255,255,255,.1);color:#fff;font-size:14px">چپتر قبلی</button>
-                    <button onclick="crShowPage(0)" style="padding:8px 16px;color:#9db4ff;font-size:12px">خواندن دوباره از اول</button>
+        // =========================================================================
+        // ۲. چپترخوان تمام‌صفحه حرفه‌ای (تک‌صفحه راست‌به‌چپ | اسکرول عمودی | دوصفحه‌ای + زوم و فیلتر)
+        // =========================================================================
+        let crMode = (function () { try { return localStorage.getItem('crMode') || 'page'; } catch (e) { return 'page'; } })();
+        let crPages = [], crIdx = 0, crBuilt = false, crZoom = 100, crFilter = 'normal';
+        const crBtn = 'padding:7px 11px;border-radius:10px;background:rgba(255,255,255,.1);color:#fff;font-size:11.5px;white-space:nowrap;border:1px solid rgba(255,255,255,.12)';
+
+        function ensureReaderOverlay() {
+            let o = document.getElementById('reader-overlay');
+            if (o) return o;
+            o = document.createElement('div');
+            o.id = 'reader-overlay';
+            o.style.cssText = 'display:none;position:fixed;inset:0;z-index:200;background:#02050e;flex-direction:column;height:100dvh';
+            o.innerHTML = `
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 12px;background:rgba(3,9,26,.94);border-bottom:1px solid rgba(255,255,255,.12);flex-wrap:wrap">
+                    <div style="display:flex;align-items:center;gap:6px">
+                        <button onclick="closeReader()" style="${crBtn}"><i class="fa-solid fa-xmark"></i> بستن</button>
+                        <button onclick="toggleReaderFullscreen()" title="تمام‌صفحه (F)" style="${crBtn}"><i class="fa-solid fa-expand"></i></button>
+                        <button onclick="cycleReaderFilter()" id="reader-filter-btn" title="فیلتر تصویر" style="${crBtn}"><i class="fa-solid fa-Sliders"></i> حالت تصویر: عادی</button>
+                    </div>
+                    <div style="min-width:0;text-align:center">
+                        <div id="reader-title" style="color:#fff;font-size:12.5px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></div>
+                        <div id="reader-counter" style="color:#9db4ff;font-size:11px;direction:ltr"></div>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:6px">
+                        <button onclick="changeReaderZoom(-15)" title="کوچک‌نمایی" style="${crBtn}"><i class="fa-solid fa-magnifying-glass-minus"></i></button>
+                        <button onclick="changeReaderZoom(15)" title="بزرگ‌نمایی" style="${crBtn}"><i class="fa-solid fa-magnifying-glass-plus"></i></button>
+                        <button id="reader-mode-btn" onclick="crToggleMode()" style="${crBtn}"></button>
+                        <button onclick="readerStep(-1)" style="${crBtn}">چپتر قبل</button>
+                        <button onclick="readerStep(1)" style="${crBtn};background:#2563eb">چپتر بعد</button>
+                    </div>
                 </div>
-            </div>
-            <div id="reader-scroll" style="display:none;position:absolute;inset:0;overflow-y:auto">
-                <div id="reader-pages" style="max-width:48rem;margin:0 auto"></div>
-                <div style="max-width:48rem;margin:0 auto;padding:24px;display:flex;gap:8px;justify-content:center">
-                    <button onclick="readerStep(-1)" style="padding:12px 20px;border-radius:12px;background:rgba(255,255,255,.1);color:#fff;font-size:14px">چپتر قبلی</button>
-                    <button onclick="readerStep(1)" style="padding:12px 20px;border-radius:12px;background:#2563eb;color:#fff;font-size:14px">چپتر بعدی</button>
+                <div style="height:3px;background:rgba(255,255,255,.1);direction:rtl"><div id="reader-bar" style="height:100%;width:0;background:linear-gradient(90deg,#38bdf8,#2563eb);transition:width .15s"></div></div>
+                <div id="reader-body" style="flex:1;position:relative;overflow:hidden">
+                    <div id="reader-page" style="position:absolute;inset:0;touch-action:pan-y;display:flex;align-items:center;justify-content:center;gap:8px;padding:8px">
+                        <img id="reader-img" alt="" style="max-width:100%;max-height:100%;object-fit:contain;user-select:none;-webkit-user-drag:none;transition:transform .2s">
+                        <img id="reader-img-second" alt="" style="display:none;max-width:49%;max-height:100%;object-fit:contain;user-select:none;-webkit-user-drag:none;transition:transform .2s">
+                        <div id="reader-end" style="display:none;position:absolute;inset:0;flex-direction:column;align-items:center;justify-content:center;gap:12px;color:#fff;text-align:center;background:rgba(2,5,14,.95)">
+                            <div style="font-size:18px;font-weight:800">پایان این چپتر</div>
+                            <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center">
+                                <button onclick="readerStep(1)" style="padding:12px 24px;border-radius:12px;background:#2563eb;color:#fff;font-size:13px;font-weight:700">چپتر بعدی</button>
+                                <button onclick="readerStep(-1)" style="padding:12px 24px;border-radius:12px;background:rgba(255,255,255,.1);color:#fff;font-size:13px">چپتر قبلی</button>
+                            </div>
+                            <button onclick="crShowPage(0)" style="padding:8px 16px;color:#9db4ff;font-size:12px">خواندن دوباره از صفحه اول</button>
+                        </div>
+                    </div>
+                    <div id="reader-scroll" style="display:none;position:absolute;inset:0;overflow-y:auto">
+                        <div id="reader-pages" style="max-width:48rem;margin:0 auto"></div>
+                        <div style="max-width:48rem;margin:0 auto;padding:24px;display:flex;gap:8px;justify-content:center">
+                            <button onclick="readerStep(-1)" style="padding:12px 20px;border-radius:12px;background:rgba(255,255,255,.1);color:#fff;font-size:14px">چپتر قبلی</button>
+                            <button onclick="readerStep(1)" style="padding:12px 20px;border-radius:12px;background:#2563eb;color:#fff;font-size:14px">چپتر بعدی</button>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>`;
-    document.body.appendChild(o);
+                <div id="reader-thumbs" style="display:flex;align-items:center;gap:6px;overflow-x:auto;padding:6px 12px;background:rgba(3,9,26,.92);border-top:1px solid rgba(255,255,255,.08);direction:rtl"></div>`;
+            document.body.appendChild(o);
 
-    // لمس: سمت چپ = صفحه‌ی بعد، سمت راست = صفحه‌ی قبل (مثل مانگای ژاپنی)
-    const pg = o.querySelector('#reader-page');
-    let sx = 0, sy = 0;
-    pg.addEventListener('touchstart', e => { sx = e.touches[0].clientX; sy = e.touches[0].clientY; }, { passive: true });
-    pg.addEventListener('touchend', e => {
-        const dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy;
-        if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) { crShowPage(crIdx + (dx > 0 ? 1 : -1)); pg._swiped = true; }
-    }, { passive: true });
-    pg.addEventListener('click', e => {
-        if (pg._swiped) { pg._swiped = false; return; }
-        if (e.target.closest('button')) return;
-        const r = pg.getBoundingClientRect(), x = (e.clientX - r.left) / r.width;
-        if (x < 0.4) crShowPage(crIdx + 1); else if (x > 0.6) crShowPage(crIdx - 1);
-    });
-    o.querySelector('#reader-scroll').addEventListener('scroll', e => {
-        const s = e.target, max = s.scrollHeight - s.clientHeight, p = max > 0 ? s.scrollTop / max : 0;
-        document.getElementById('reader-bar').style.width = (p * 100) + '%';
-        document.getElementById('reader-counter').textContent = Math.round(p * 100) + '%';
-    }, { passive: true });
-    return o;
-}
-function crShowPage(i) {
-    const n = crPages.length;
-    if (i < 0) { readerStep(-1); return; }
-    if (i > n) return;
-    crIdx = i;
-    const img = document.getElementById('reader-img'), end = document.getElementById('reader-end');
-    if (i === n) { img.style.display = 'none'; end.style.display = 'flex'; }
-    else { end.style.display = 'none'; img.style.display = 'block'; img.src = crPages[i]; }
-    for (let k = 1; k <= 2; k++) if (crPages[i + k]) { const pre = new Image(); pre.src = crPages[i + k]; }
-    document.getElementById('reader-counter').textContent = i === n ? 'پایان' : (i + 1) + ' / ' + n;
-    document.getElementById('reader-bar').style.width = (Math.min(i + 1, n) / n * 100) + '%';
-}
-function crApplyMode() {
-    const isPage = crMode === 'page';
-    document.getElementById('reader-page').style.display = isPage ? 'block' : 'none';
-    document.getElementById('reader-scroll').style.display = isPage ? 'none' : 'block';
-    document.getElementById('reader-mode-btn').innerHTML = isPage ? '<i class="fa-solid fa-arrows-up-down"></i> اسکرول' : '<i class="fa-solid fa-book-open"></i> صفحه‌ای';
-    if (isPage) { crShowPage(Math.min(crIdx, crPages.length)); return; }
-    const box = document.getElementById('reader-pages'), sc = document.getElementById('reader-scroll');
-    if (!crBuilt) {
-        box.innerHTML = crPages.map((p, i) =>
-            `<img src="${p}" alt="صفحه ${i + 1}" loading="${i < 3 ? 'eager' : 'lazy'}" decoding="async" style="display:block;width:100%;height:auto;min-height:240px;background:#0a0f1f">`).join('');
-        crBuilt = true;
-    }
-    const target = box.children[Math.min(crIdx, crPages.length - 1)];
-    sc.scrollTop = target ? target.offsetTop : 0;
-    sc.dispatchEvent(new Event('scroll'));
-}
-function crToggleMode() {
-    if (crMode === 'scroll') {  // از اسکرول به صفحه‌ای: صفحه‌ی در حال دیدن را پیدا کن
-        const sc = document.getElementById('reader-scroll'), imgs = [...document.getElementById('reader-pages').children];
-        const k = imgs.findIndex(im => im.offsetTop + im.offsetHeight > sc.scrollTop + 10);
-        crIdx = k < 0 ? 0 : k;
-    }
-    crMode = crMode === 'page' ? 'scroll' : 'page';
-    try { localStorage.setItem('crMode', crMode); } catch (e) {}
-    crApplyMode();
-}
-function openReader(mangaId, num) {
-    const pages = chapterPages(mangaId, num);
-    if (!pages) { showToast('این چپتر هنوز آماده نیست'); return; }
-    const manga = mangaDatabase.find(m => m.id === mangaId);
-    activeMangaId = mangaId; activeReaderChapterNum = num;
-    const o = ensureReaderOverlay();
-    crPages = pages; crIdx = 0; crBuilt = false;
-    document.getElementById('reader-pages').innerHTML = '';
-    document.getElementById('reader-title').textContent = `${manga ? manga.titleFa : ''} — چپتر ${num}`;
-    o.style.display = 'flex';
-    document.body.style.overflow = 'hidden';
-    crApplyMode();
-}
-function closeReader() {
-    const o = document.getElementById('reader-overlay');
-    if (o) o.style.display = 'none';
-    document.body.style.overflow = '';
-}
-function readerStep(dir) {
-    const cfg = MANGA_CHAPTERS[activeMangaId]; if (!cfg) return;
-    const nums = Object.keys(cfg.chapters).map(Number).sort((a, b) => a - b);
-    const i = nums.indexOf(activeReaderChapterNum) + dir;
-    if (i < 0 || i >= nums.length) { showToast(dir > 0 ? 'این آخرین چپتر است' : 'این اولین چپتر است'); return; }
-    openReader(activeMangaId, nums[i]);
-}
-document.addEventListener('keydown', e => {
-    const o = document.getElementById('reader-overlay');
-    if (!o || o.style.display === 'none') return;
-    if (e.key === 'Escape') closeReader();
-    else if (crMode === 'page' && e.key === 'ArrowLeft') crShowPage(crIdx + 1);
-    else if (crMode === 'page' && e.key === 'ArrowRight') crShowPage(crIdx - 1);
-});
+            const pg = o.querySelector('#reader-page');
+            let sx = 0, sy = 0;
+            pg.addEventListener('touchstart', e => { sx = e.touches[0].clientX; sy = e.touches[0].clientY; }, { passive: true });
+            pg.addEventListener('touchend', e => {
+                const dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy;
+                const step = crMode === 'double' ? 2 : 1;
+                if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) { crShowPage(crIdx + (dx > 0 ? step : -step)); pg._swiped = true; }
+            }, { passive: true });
+            pg.addEventListener('click', e => {
+                if (pg._swiped) { pg._swiped = false; return; }
+                if (e.target.closest('button')) return;
+                const r = pg.getBoundingClientRect(), x = (e.clientX - r.left) / r.width;
+                const step = crMode === 'double' ? 2 : 1;
+                if (x < 0.4) crShowPage(crIdx + step); else if (x > 0.6) crShowPage(crIdx - step);
+            });
+            o.querySelector('#reader-scroll').addEventListener('scroll', e => {
+                const s = e.target, max = s.scrollHeight - s.clientHeight, p = max > 0 ? s.scrollTop / max : 0;
+                document.getElementById('reader-bar').style.width = (p * 100) + '%';
+                document.getElementById('reader-counter').textContent = Math.round(p * 100) + '%';
+            }, { passive: true });
+            return o;
+        }
 
+        function changeReaderZoom(delta) {
+            crZoom = Math.max(70, Math.min(175, crZoom + delta));
+            const im1 = document.getElementById('reader-img');
+            const im2 = document.getElementById('reader-img-second');
+            const pagesWrap = document.getElementById('reader-pages');
+            if (im1) im1.style.transform = `scale(${crZoom / 100})`;
+            if (im2) im2.style.transform = `scale(${crZoom / 100})`;
+            if (pagesWrap) pagesWrap.style.maxWidth = (48 * (crZoom / 100)) + 'rem';
+        }
 
+        function cycleReaderFilter() {
+            const order = ['normal', 'contrast', 'sepia', 'night'];
+            const labels = { normal: 'عادی', contrast: 'جوهر پررنگ', sepia: 'کاغذ قدیمی', night: 'تاریک شب' };
+            crFilter = order[(order.indexOf(crFilter) + 1) % order.length];
+            const body = document.getElementById('reader-body');
+            body.classList.remove('reader-filter-contrast', 'reader-filter-sepia', 'reader-filter-night');
+            if (crFilter !== 'normal') body.classList.add('reader-filter-' + crFilter);
+            const btn = document.getElementById('reader-filter-btn');
+            if (btn) btn.innerHTML = `<i class="fa-solid fa-sliders"></i> تصویر: ${labels[crFilter]}`;
+        }
+
+        function toggleReaderFullscreen() {
+            const o = document.getElementById('reader-overlay');
+            if (!document.fullscreenElement && o && o.requestFullscreen) o.requestFullscreen().catch(() => {});
+            else if (document.fullscreenElement && document.exitFullscreen) document.exitFullscreen().catch(() => {});
+        }
+
+        function renderReaderThumbs() {
+            const box = document.getElementById('reader-thumbs');
+            if (!box) return;
+            box.innerHTML = crPages.map((p, i) => `
+                <button onclick="crShowPage(${i})" style="flex:none;width:36px;height:50px;border-radius:6px;overflow:hidden;border:2px solid ${i === crIdx ? '#38bdf8' : 'rgba(255,255,255,.15)'};opacity:${i === crIdx ? '1' : '.55'}">
+                    <img src="${p}" alt="" style="width:100%;height:100%;object-fit:cover">
+                </button>
+            `).join('');
+        }
+
+        function crShowPage(i) {
+            const n = crPages.length;
+            if (i < 0) { readerStep(-1); return; }
+            if (i > n) return;
+            crIdx = i;
+            const img = document.getElementById('reader-img');
+            const img2 = document.getElementById('reader-img-second');
+            const end = document.getElementById('reader-end');
+
+            if (i >= n) {
+                img.style.display = 'none';
+                img2.style.display = 'none';
+                end.style.display = 'flex';
+            } else {
+                end.style.display = 'none';
+                img.style.display = 'block';
+                img.src = crPages[i];
+                if (crMode === 'double' && i + 1 < n) {
+                    img.style.maxWidth = '49%';
+                    img2.style.display = 'block';
+                    img2.src = crPages[i + 1];
+                } else {
+                    img.style.maxWidth = '100%';
+                    img2.style.display = 'none';
+                }
+            }
+            for (let k = 1; k <= 2; k++) if (crPages[i + k]) { const pre = new Image(); pre.src = crPages[i + k]; }
+            document.getElementById('reader-counter').textContent = i >= n ? 'پایان' : (i + 1) + ' / ' + n;
+            document.getElementById('reader-bar').style.width = (Math.min(i + 1, n) / n * 100) + '%';
+            renderReaderThumbs();
+            saveContinueReadingProgress(activeMangaId, activeReaderChapterNum, i + 1, n);
+        }
+
+        function crApplyMode() {
+            const isScroll = crMode === 'scroll';
+            document.getElementById('reader-page').style.display = isScroll ? 'none' : 'flex';
+            document.getElementById('reader-scroll').style.display = isScroll ? 'block' : 'none';
+            const modeLabels = {
+                page: '<i class="fa-solid fa-file"></i> حالت: تک‌صفحه',
+                double: '<i class="fa-solid fa-book-open"></i> حالت: دوصفحه‌ای',
+                scroll: '<i class="fa-solid fa-arrows-up-down"></i> حالت: اسکرول عمودی'
+            };
+            document.getElementById('reader-mode-btn').innerHTML = modeLabels[crMode] || modeLabels.page;
+
+            if (!isScroll) {
+                crShowPage(Math.min(crIdx, crPages.length));
+                return;
+            }
+            const box = document.getElementById('reader-pages'), sc = document.getElementById('reader-scroll');
+            if (!crBuilt) {
+                box.innerHTML = crPages.map((p, i) =>
+                    `<img src="${p}" alt="صفحه ${i + 1}" loading="${i < 3 ? 'eager' : 'lazy'}" decoding="async" style="display:block;width:100%;height:auto;min-height:240px;background:#0a0f1f">`).join('');
+                crBuilt = true;
+            }
+            const target = box.children[Math.min(crIdx, crPages.length - 1)];
+            sc.scrollTop = target ? target.offsetTop : 0;
+            sc.dispatchEvent(new Event('scroll'));
+        }
+
+        function crToggleMode() {
+            if (crMode === 'scroll') {
+                const sc = document.getElementById('reader-scroll'), imgs = [...document.getElementById('reader-pages').children];
+                const k = imgs.findIndex(im => im.offsetTop + im.offsetHeight > sc.scrollTop + 10);
+                crIdx = k < 0 ? 0 : k;
+            }
+            const order = ['page', 'double', 'scroll'];
+            crMode = order[(order.indexOf(crMode) + 1) % order.length];
+            try { localStorage.setItem('crMode', crMode); } catch (e) {}
+            crApplyMode();
+        }
+
+        function openReader(mangaId, num) {
+            const pages = chapterPages(mangaId, num);
+            if (!pages || !pages.length) { showToast('این چپتر هنوز آماده نیست'); return; }
+            const manga = mangaDatabase.find(m => m.id === mangaId);
+            activeMangaId = mangaId;
+            activeReaderChapterNum = num;
+            markChapterAsRead(mangaId, num);
+            const o = ensureReaderOverlay();
+            crPages = pages; crIdx = 0; crBuilt = false; crZoom = 100;
+            document.getElementById('reader-pages').innerHTML = '';
+            const chLabel = num === 0 ? 'چپتر پیش‌نمایش (صفحات نمونه)' : `چپتر ${num}`;
+            document.getElementById('reader-title').textContent = `${manga ? manga.titleFa : ''} — ${chLabel}`;
+            o.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+            crApplyMode();
+        }
+
+        function openSamplePreviewReader(mangaId) {
+            openReader(mangaId, 0);
+        }
+
+        function startFirstOrSampleChapter() {
+            const cfg = MANGA_CHAPTERS[activeMangaId];
+            if (cfg && cfg.chapters && Object.keys(cfg.chapters).length) {
+                const firstNum = Math.min(...Object.keys(cfg.chapters).map(Number));
+                openReader(activeMangaId, firstNum);
+            } else {
+                openReader(activeMangaId, 0);
+            }
+        }
+
+        function closeReader() {
+            const o = document.getElementById('reader-overlay');
+            if (o) o.style.display = 'none';
+            document.body.style.overflow = '';
+            renderContinueReadingBar();
+            try { renderChaptersList(); } catch (e) {}
+        }
+
+        function readerStep(dir) {
+            const cfg = MANGA_CHAPTERS[activeMangaId];
+            if (!cfg || !cfg.chapters) { showToast('چپتر دیگری برای این اثر ثبت نشده است'); return; }
+            const nums = Object.keys(cfg.chapters).map(Number).sort((a, b) => a - b);
+            const i = nums.indexOf(activeReaderChapterNum) + dir;
+            if (i < 0 || i >= nums.length) { showToast(dir > 0 ? 'این آخرین چپتر است' : 'این اولین چپتر است'); return; }
+            openReader(activeMangaId, nums[i]);
+        }
+
+        document.addEventListener('keydown', e => {
+            const o = document.getElementById('reader-overlay');
+            if (!o || o.style.display === 'none') return;
+            const step = crMode === 'double' ? 2 : 1;
+            if (e.key === 'Escape') closeReader();
+            else if (crMode !== 'scroll' && e.key === 'ArrowLeft') crShowPage(crIdx + step);
+            else if (crMode !== 'scroll' && e.key === 'ArrowRight') crShowPage(crIdx - step);
+            else if (e.key.toLowerCase() === 'f') toggleReaderFullscreen();
+        });
+
+        // =========================================================================
+        // ۳. بانک اطلاعاتی ۲۰ مانگای کامل + ۱۰ پنل سیاه‌وسفید دیالوگ‌های ماندگار
+        // =========================================================================
         const defaultReadingPages = [
             '441727.jpg', '441728.jpg', '441729.jpg', '441730.jpg', '441731.jpg',
             '441732.jpg', '441733.jpg', '441734.jpg', '441735.jpg', '441736.jpg'
@@ -1825,7 +2223,19 @@ document.addEventListener('keydown', e => {
             }
         ];
 
-        // داده‌های بخش ۱۰٪ دیالوگ‌های ماندگار با ۱۰ تصویر سیاه‌وسفید آپلودشده در مرحله اول
+        // تولید خودکار کاور SVG در صورتی که فایل covers.js در محیط پیش‌نمایش نباشد
+        const fallbackPalette = ['#1d4ed8', '#be123c', '#6d28d9', '#0f766e', '#b45309', '#1e40af', '#9f1239', '#4338ca'];
+        initialMangaList.forEach((m, idx) => {
+            if (!window.IMG[m.cover]) {
+                window.IMG[m.cover] = makeFallbackSvgCover(m.titleEn, m.jpTitle, fallbackPalette[idx % fallbackPalette.length]);
+            }
+        });
+        defaultReadingPages.forEach((p, idx) => {
+            if (!window.IMG[p]) {
+                window.IMG[p] = makeFallbackSvgCover('PANEL ' + (idx + 1), '第' + (idx + 1) + '頁', '#1e293b');
+            }
+        });
+
         const compactQuotesPanels = [
             { img: '441727.jpg', char: 'گاتس (برسرک)', quote: '«در دل این تاریکی، شمشیرم تنها حقیقت من است.»' },
             { img: '441736.jpg', char: 'توگاوا (مانگای REAL)', quote: '«از اعماق وجودم از این وضعیت متنفرم، اما تسلیم نمی‌شوم.»' },
@@ -1843,26 +2253,29 @@ document.addEventListener('keydown', e => {
         let mangaDatabase = [];
         let bookmarkedIds = [];
         let currentGenreFilter = 'all';
+        let currentStatusFilter = 'all';
         let currentSearchQuery = '';
         let isBookmarkFilterActive = false;
+        let libraryViewMode = 'poster'; // 'poster' | 'bento'
         let currentHeroSlide = 0;
-        let featuredIds = [7, 6, 11, 0, 8]; // پیش‌فرض؛ با هر بار باز شدن سایت، به‌صورت تصادفی از کل مانگاها جایگزین می‌شود
-        function shuffled(arr) { const a = arr.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+        let featuredIds = [7, 6, 11, 0, 8];
+        let activeMangaId = 0;
+        let isChapterDescending = true;
+        let activeReaderChapterNum = 1;
+
+        function shuffled(arr) {
+            const a = arr.slice();
+            for (let i = a.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [a[i], a[j]] = [a[j], a[i]];
+            }
+            return a;
+        }
+
         function pickRandomFeatured() {
             const ids = shuffled(mangaDatabase.map(m => m.id)).slice(0, 5);
             if (ids.length) { featuredIds = ids; currentHeroSlide = 0; }
         }
-
-        // وضعیت صفحه تکی مانگا
-        let activeMangaId = 0;
-        let isChapterDescending = true;
-
-        // وضعیت چپترخوان
-        let activeReaderChapterNum = 1;
-        let readerMode = 'vertical';
-        let readerZoom = 100;
-        let currentSinglePageIndex = 0;
-        let currentReaderPages = [];
 
         // بارگذاری اطلاعات از localStorage یا مقدار اولیه
         function initDatabase() {
@@ -1870,7 +2283,6 @@ document.addEventListener('keydown', e => {
                 const savedManga = localStorage.getItem('blueManga_db_v1');
                 if (savedManga) {
                     mangaDatabase = JSON.parse(savedManga);
-                    // مانگاهای جدیدِ داخلی (id از ۱۰۰ به بالا) که هنوز در کتابخانه‌ی ذخیره‌شده نیستند اضافه می‌شوند
                     let seen = [];
                     try { seen = JSON.parse(localStorage.getItem('blueManga_seen_extra_v1') || '[]'); } catch (e) {}
                     initialMangaList.filter(m => m.id >= 100 && !seen.includes(m.id) && !mangaDatabase.some(x => x.id === m.id))
@@ -1885,6 +2297,9 @@ document.addEventListener('keydown', e => {
                 if (savedBookmarks) {
                     bookmarkedIds = JSON.parse(savedBookmarks);
                 }
+
+                const savedTheme = localStorage.getItem('blueManga_theme_v1');
+                if (savedTheme) document.documentElement.setAttribute('data-theme', savedTheme);
             } catch (e) {
                 mangaDatabase = JSON.parse(JSON.stringify(initialMangaList));
             }
@@ -1892,17 +2307,16 @@ document.addEventListener('keydown', e => {
         }
 
         function saveDatabase() {
-            try {
-                localStorage.setItem('blueManga_db_v1', JSON.stringify(mangaDatabase));
-            } catch (e) {}
+            try { localStorage.setItem('blueManga_db_v1', JSON.stringify(mangaDatabase)); } catch (e) {}
         }
 
         // =========================================================================
-        // ۲. رندر اسلایدر هیرو (Featured Slider)
+        // ۴. رندر اسلایدر هیرو + داک مینیاتوری (Featured Hero Showcase)
         // =========================================================================
         function renderHeroSlider() {
             const targetId = featuredIds[currentHeroSlide % featuredIds.length];
             const manga = mangaDatabase.find(m => m.id === targetId) || mangaDatabase[0];
+            const isBookmarked = bookmarkedIds.includes(manga.id);
 
             const bgBlur = document.getElementById('hero-bg-blur');
             if (bgBlur) bgBlur.style.backgroundImage = `url('${cv(manga.cover)}')`;
@@ -1910,32 +2324,51 @@ document.addEventListener('keydown', e => {
             const container = document.getElementById('hero-slider-content');
             container.innerHTML = `
                 <div class="hero-in order-2 lg:order-none lg:col-span-8 space-y-5 text-right">
-                    <div class="chip inline-flex items-center gap-2 px-3 py-1 rounded-full text-blue-200 text-xs font-bold">
-                        <span class="w-1.5 h-1.5 rounded-full bg-sky-400"></span>
-                        <span>پیشنهاد امروز · ${manga.status}</span>
+                    <div class="flex flex-wrap items-center gap-2">
+                        <div class="chip inline-flex items-center gap-2 px-3 py-1 rounded-full text-blue-200 text-xs font-bold">
+                            <span class="w-2 h-2 rounded-full bg-sky-400 animate-pulse"></span>
+                            <span>پیشنهاد ویژه امروز · ${manga.status}</span>
+                        </div>
+                        <span class="chip px-2.5 py-1 rounded-full text-[11px] text-amber-300 font-bold">
+                            <i class="fa-solid fa-trophy ml-1"></i>رتبه برتر آرشیو
+                        </span>
                     </div>
+
                     <div>
-                        <h1 class="font-display text-5xl sm:text-7xl text-white leading-[1.15]">${manga.titleFa}</h1>
-                        <p class="text-blue-300/70 text-xs sm:text-sm mt-2" dir="ltr">${manga.titleEn} — <span class="font-jp">${manga.jpTitle}</span></p>
+                        <h1 class="font-display text-5xl sm:text-7xl text-white leading-[1.12]">${manga.titleFa}</h1>
+                        <p class="text-blue-300/75 text-xs sm:text-sm mt-2" dir="ltr">${manga.titleEn} — <span class="font-jp">${manga.jpTitle}</span></p>
                     </div>
-                    <p class="text-blue-100/80 text-sm sm:text-base leading-8 max-w-2xl line-clamp-3">${manga.synopsis}</p>
+
+                    <p class="text-blue-100/85 text-sm sm:text-base leading-8 max-w-2xl line-clamp-3">${manga.synopsis}</p>
+
+                    <!-- نقل‌قول کوتاه داخل هیرو -->
+                    <div class="max-w-xl rounded-xl bg-white/5 border-r-2 border-sky-400 px-3.5 py-2 text-xs text-blue-200/90 italic">
+                        ${manga.quote}
+                    </div>
+
                     <div class="flex flex-wrap items-center gap-2 text-xs text-blue-100">
-                        <span class="chip px-3 py-1.5 rounded-lg"><i class="fa-solid fa-star text-amber-400 ml-1"></i><strong>${manga.rating}</strong></span>
-                        <span class="chip px-3 py-1.5 rounded-lg">${manga.year}</span>
+                        <span class="chip px-3 py-1.5 rounded-lg"><i class="fa-solid fa-star text-amber-400 ml-1"></i><strong>${manga.rating}</strong> / 10</span>
+                        <span class="chip px-3 py-1.5 rounded-lg"><i class="fa-regular fa-calendar ml-1 text-blue-300"></i>${manga.year}</span>
+                        <span class="chip px-3 py-1.5 rounded-lg"><i class="fa-solid fa-layer-group ml-1 text-blue-300"></i>${manga.chaptersCount} چپتر</span>
                         <span class="chip px-3 py-1.5 rounded-lg">${manga.mainGenre}</span>
                         <span class="chip px-3 py-1.5 rounded-lg hidden sm:inline">${manga.author}</span>
                     </div>
+
                     <div class="flex flex-wrap items-center gap-3 pt-2">
                         <button onclick="openMangaDetail(${manga.id}, 'info')" class="btn-primary px-7 py-3.5 rounded-xl text-white font-bold text-sm flex items-center gap-2">
-                            <i class="fa-solid fa-book-open"></i><span>مشاهده اثر</span>
+                            <i class="fa-solid fa-book-open"></i><span>مشاهده و مطالعه اثر</span>
                         </button>
-                        <button onclick="openMangaDetail(${manga.id}, 'comments')" class="chip hover:bg-white/10 px-5 py-3.5 rounded-xl text-white text-sm transition flex items-center gap-2">
-                            <i class="fa-regular fa-comments"></i><span>نظرات</span>
+                        <button onclick="openSamplePreviewReader(${manga.id})" class="chip hover:bg-white/15 px-5 py-3.5 rounded-xl text-white text-sm font-medium transition flex items-center gap-2">
+                            <i class="fa-solid fa-bolt text-sky-400"></i><span>پیش‌نمایش سریع چپتر</span>
+                        </button>
+                        <button onclick="toggleBookmark(${manga.id});renderHeroSlider()" class="chip hover:bg-white/15 w-11 h-11 rounded-xl text-white flex items-center justify-center transition" title="افزودن به لیست من">
+                            <i class="${isBookmarked ? 'fa-solid text-sky-400' : 'fa-regular'} fa-bookmark"></i>
                         </button>
                     </div>
                 </div>
-                <div class="hero-in order-1 lg:order-none lg:col-span-4 flex justify-center" style="position:relative"><div class="hero-aura" aria-hidden="true"></div>
-                    <div id="hero-cover" onclick="openMangaDetail(${manga.id}, 'info')" class="tilt relative w-44 sm:w-64 aspect-[2/3] rounded-2xl overflow-hidden cursor-pointer border border-white/20 shadow-[0_40px_80px_-20px_rgba(37,99,235,.55)]">
+                <div class="hero-in order-1 lg:order-none lg:col-span-4 flex justify-center" style="position:relative">
+                    <div class="hero-aura" aria-hidden="true"></div>
+                    <div id="hero-cover" onclick="openMangaDetail(${manga.id}, 'info')" class="tilt relative w-44 sm:w-64 aspect-[2/3] rounded-2xl overflow-hidden cursor-pointer border border-white/25 shadow-[0_40px_80px_-20px_rgba(37,99,235,.55)]">
                         <img src="${cv(manga.cover)}" alt="${manga.titleFa}" class="w-full h-full object-cover object-top">
                         <div class="absolute inset-0 bg-gradient-to-tr from-white/10 via-transparent to-transparent pointer-events-none"></div>
                         <div class="foil"></div><div class="glare"></div>
@@ -1943,15 +2376,29 @@ document.addEventListener('keydown', e => {
                 </div>
             `;
             applyHeroColors(cv(manga.cover));
-            const jp = document.getElementById('hero-jp-mark');
-            if (jp) { jp.style.animation = 'none'; jp.textContent = manga.jpTitle || ''; void jp.offsetWidth; jp.style.animation = ''; }
 
+            // نقطه‌های پیشرفت اسلاید
             const dotsContainer = document.getElementById('hero-dots');
             dotsContainer.innerHTML = featuredIds.map((_, idx) => `
                 <button onclick="setHeroSlide(${idx})" aria-label="اسلاید ${idx + 1}" class="relative h-1.5 rounded-full overflow-hidden bg-blue-400/25 transition-all ${idx === currentHeroSlide ? 'w-12' : 'w-3 hover:bg-blue-400/50'}">
                     ${idx === currentHeroSlide ? '<span class="dot-fill absolute inset-0 bg-white rounded-full"></span>' : ''}
                 </button>
             `).join('');
+
+            // داک مینیاتوری کاورهای ویژه
+            const miniDock = document.getElementById('hero-mini-dock');
+            if (miniDock) {
+                miniDock.innerHTML = featuredIds.map((fid, idx) => {
+                    const fm = mangaDatabase.find(x => x.id === fid) || mangaDatabase[0];
+                    const active = idx === currentHeroSlide;
+                    return `
+                        <button onclick="setHeroSlide(${idx})" title="${fm.titleFa}" class="relative w-10 h-14 rounded-lg overflow-hidden border transition-all shrink-0 ${active ? 'border-white scale-110 shadow-lg shadow-blue-500/40' : 'border-white/15 opacity-55 hover:opacity-90'}">
+                            <img src="${cv(fm.cover)}" alt="${fm.titleFa}" class="w-full h-full object-cover object-top">
+                        </button>
+                    `;
+                }).join('');
+            }
+
             restartHeroTimer();
         }
 
@@ -1959,22 +2406,11 @@ document.addEventListener('keydown', e => {
         function restartHeroTimer() {
             clearInterval(heroTimer);
             if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-            heroTimer = setInterval(() => { if (!document.hidden && !document.getElementById('home-view').classList.contains('hidden')) changeHeroSlide(1); }, 7000);
+            heroTimer = setInterval(() => {
+                if (!document.hidden && !document.getElementById('home-view').classList.contains('hidden')) changeHeroSlide(1);
+            }, 7000);
         }
 
-        function bindHeroTilt() { return;
-            const el = document.getElementById('hero-cover');
-            if (!el || !window.matchMedia('(hover: hover)').matches) return;
-            el.addEventListener('pointermove', e => {
-                const r = el.getBoundingClientRect();
-                const x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5;
-                el.style.setProperty('--ry', (x * 14) + 'deg');
-                el.style.setProperty('--rx', (-y * 14) + 'deg');
-            });
-            el.addEventListener('pointerleave', () => { el.style.setProperty('--ry', '0deg'); el.style.setProperty('--rx', '0deg'); });
-        }
-
-        
         function changeHeroSlide(dir) {
             currentHeroSlide = (currentHeroSlide + dir + featuredIds.length) % featuredIds.length;
             renderHeroSlider();
@@ -1986,10 +2422,40 @@ document.addEventListener('keydown', e => {
         }
 
         // =========================================================================
-        // ۳. رندر کتابخانه مانگاها (Manga Library Grid)
+        // ۵. رندر کتابخانه مانگاها (حالت پوستری ۵ ستونه + حالت بنتو مشرح)
         // =========================================================================
-        const MANGA_PER_PAGE = 14;
+        const MANGA_PER_PAGE = 15;
         let libPage = 1;
+
+        function setLibraryViewMode(mode) {
+            libraryViewMode = mode;
+            const btnPoster = document.getElementById('view-btn-poster');
+            const btnBento = document.getElementById('view-btn-bento');
+            const grid = document.getElementById('manga-grid');
+            if (mode === 'bento') {
+                btnBento.className = 'w-8 h-7 rounded-lg bg-blue-600 text-white flex items-center justify-center transition';
+                btnPoster.className = 'w-8 h-7 rounded-lg text-blue-300/70 hover:text-white flex items-center justify-center transition';
+                grid.className = 'grid-bento grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5';
+            } else {
+                btnPoster.className = 'w-8 h-7 rounded-lg bg-blue-600 text-white flex items-center justify-center transition';
+                btnBento.className = 'w-8 h-7 rounded-lg text-blue-300/70 hover:text-white flex items-center justify-center transition';
+                grid.className = 'grid-poster grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-x-2.5 gap-y-5 sm:gap-x-5 sm:gap-y-8';
+            }
+            renderMangaGrid();
+        }
+
+        function setStatusFilter(st) {
+            currentStatusFilter = st;
+            libPage = 1;
+            document.querySelectorAll('.st-btn').forEach(b => {
+                if (b.dataset.st === st) {
+                    b.className = 'st-btn px-2.5 py-1 rounded-lg bg-blue-600 text-white font-bold transition';
+                } else {
+                    b.className = 'st-btn px-2.5 py-1 rounded-lg text-blue-200/75 hover:text-white transition';
+                }
+            });
+            renderMangaGrid();
+        }
 
         function renderPager(total) {
             const box = document.getElementById('manga-pager');
@@ -2023,12 +2489,15 @@ document.addEventListener('keydown', e => {
                 if (currentGenreFilter !== 'all' && !m.genres.includes(currentGenreFilter) && m.mainGenre !== currentGenreFilter) {
                     return false;
                 }
+                if (currentStatusFilter === 'ongoing' && !m.status.includes('در حال انتشار')) return false;
+                if (currentStatusFilter === 'completed' && !m.status.includes('پایان یافته')) return false;
                 if (currentSearchQuery) {
                     const q = currentSearchQuery.toLowerCase();
                     return (
                         m.titleFa.toLowerCase().includes(q) ||
                         m.titleEn.toLowerCase().includes(q) ||
-                        m.author.toLowerCase().includes(q)
+                        m.author.toLowerCase().includes(q) ||
+                        m.genres.some(g => g.toLowerCase().includes(q))
                     );
                 }
                 return true;
@@ -2044,47 +2513,96 @@ document.addEventListener('keydown', e => {
 
             document.getElementById('manga-count-number').textContent = filtered.length;
 
+            // نمایش قرص فیلتر فعال
+            const pill = document.getElementById('active-filter-pill');
+            const pillText = document.getElementById('active-filter-text');
+            if (isBookmarkFilterActive || currentGenreFilter !== 'all' || currentStatusFilter !== 'all' || currentSearchQuery) {
+                pill.classList.remove('hidden');
+                pill.classList.add('inline-flex');
+                pillText.textContent = isBookmarkFilterActive ? 'لیست مطالعه من' : (currentSearchQuery ? `جستجو: ${currentSearchQuery}` : currentGenreFilter);
+            } else {
+                pill.classList.add('hidden');
+                pill.classList.remove('inline-flex');
+            }
+
             if (filtered.length === 0) {
                 renderPager(0);
                 grid.innerHTML = `
                     <div class="col-span-full bg-navy-900/80 border border-blue-400/15 rounded-2xl p-10 text-center space-y-3">
                         <i class="fa-solid fa-book-open text-3xl text-blue-400/50"></i>
                         <p class="text-white font-bold text-base">مانگایی با این مشخصات یافت نشد.</p>
-                        <button onclick="resetAllFilters()" class="px-4 py-2 rounded-xl bg-blue-600 text-white text-xs font-bold">نمایش همه مانگاها</button>
+                        <button onclick="resetAllFilters()" class="px-4 py-2 rounded-xl btn-primary text-white text-xs font-bold">نمایش همه مانگاها</button>
                     </div>
                 `;
                 return;
             }
 
-            // صفحه‌بندی: ۱۴ مانگا در هر صفحه
             const totalPages = Math.max(1, Math.ceil(filtered.length / MANGA_PER_PAGE));
             if (libPage > totalPages) libPage = totalPages;
             if (libPage < 1) libPage = 1;
             renderPager(totalPages);
             filtered = filtered.slice((libPage - 1) * MANGA_PER_PAGE, libPage * MANGA_PER_PAGE);
 
-            grid.innerHTML = filtered.map((manga, i) => {
-                const isBookmarked = bookmarkedIds.includes(manga.id);
-                const top = sortBy === 'popular' && currentGenreFilter === 'all' && !currentSearchQuery && !isBookmarkFilterActive && i < 3;
-                return `
-                <article class="m-card group scroll-reveal">
-                    <div class="cover" onclick="openMangaDetail(${manga.id}, 'info')">
-                        <img src="${cv(manga.cover)}" alt="${manga.titleFa}" loading="lazy" onerror="this.src='https://placehold.co/400x600/0b1633/ffffff?text=Manga'">
-                        <div class="shade"></div>
-                        <span class="absolute top-2.5 right-2.5 px-2 py-1 rounded-lg bg-black/55 backdrop-blur-md text-[11px] font-bold text-amber-300 flex items-center gap-1"><i class="fa-solid fa-star text-[10px]"></i>${manga.rating}</span>
-                        <button aria-label="ذخیره در لیست من" onclick="event.stopPropagation(); toggleBookmark(${manga.id})" class="absolute top-2.5 left-2.5 w-8 h-8 rounded-lg bg-black/55 backdrop-blur-md hover:bg-blue-600 flex items-center justify-center transition">
-                            <i class="${isBookmarked ? 'fa-solid text-sky-300' : 'fa-regular text-white'} fa-bookmark text-xs"></i>
-                        </button>
-                        ${top ? `<span class="rank">${i + 1}</span>` : ''}
-                        <div class="cap">
-                            <h3>${manga.titleFa}</h3>
-                            <p class="en">${manga.titleEn}</p>
-                            <button class="go" onclick="event.stopPropagation(); openMangaDetail(${manga.id}, 'info')">مشاهده</button>
+            if (libraryViewMode === 'bento') {
+                grid.innerHTML = filtered.map(manga => {
+                    const isBookmarked = bookmarkedIds.includes(manga.id);
+                    return `
+                    <article onclick="openMangaDetail(${manga.id}, 'info')" class="bento-card relative rounded-2xl p-4 flex gap-4 cursor-pointer hover:-translate-y-1 transition-all duration-300 scroll-reveal">
+                        <div class="w-28 sm:w-32 aspect-[2/3] rounded-xl overflow-hidden shrink-0 border border-white/15 relative">
+                            <img src="${cv(manga.cover)}" alt="${manga.titleFa}" loading="lazy" class="w-full h-full object-cover object-top">
+                            <span class="absolute top-1.5 right-1.5 px-1.5 py-0.5 rounded-md bg-black/70 text-[10px] font-bold text-amber-300 flex items-center gap-1"><i class="fa-solid fa-star text-[9px]"></i>${manga.rating}</span>
                         </div>
-                    </div>
-                </article>
-                `;
-            }).join('');
+                        <div class="flex-1 min-w-0 flex flex-col justify-between text-right">
+                            <div class="space-y-1.5">
+                                <div class="flex items-start justify-between gap-2">
+                                    <h3 class="text-white font-bold text-base truncate">${manga.titleFa}</h3>
+                                    <button onclick="event.stopPropagation(); toggleBookmark(${manga.id})" class="w-7 h-7 rounded-lg bg-white/10 hover:bg-blue-600 text-xs flex items-center justify-center shrink-0">
+                                        <i class="${isBookmarked ? 'fa-solid text-sky-300' : 'fa-regular text-white'} fa-bookmark"></i>
+                                    </button>
+                                </div>
+                                <p class="text-[11px] text-blue-300/70 truncate" dir="ltr">${manga.titleEn}</p>
+                                <p class="text-xs text-blue-100/75 line-clamp-3 leading-relaxed">${manga.synopsis}</p>
+                            </div>
+                            <div class="pt-3 flex items-center justify-between gap-2 border-t border-white/10 mt-2">
+                                <span class="text-[11px] text-sky-300 font-medium">${manga.mainGenre} • ${manga.chaptersCount} چپتر</span>
+                                <span class="text-xs font-bold text-white flex items-center gap-1">مشاهده <i class="fa-solid fa-angle-left text-[10px]"></i></span>
+                            </div>
+                        </div>
+                    </article>`;
+                }).join('');
+            } else {
+                grid.innerHTML = filtered.map((manga, i) => {
+                    const isBookmarked = bookmarkedIds.includes(manga.id);
+                    const globalIdx = (libPage - 1) * MANGA_PER_PAGE + i;
+                    const top = sortBy === 'popular' && currentGenreFilter === 'all' && currentStatusFilter === 'all' && !currentSearchQuery && !isBookmarkFilterActive && globalIdx < 3;
+                    return `
+                    <article class="m-card group scroll-reveal">
+                        <div class="cover" onclick="openMangaDetail(${manga.id}, 'info')">
+                            <img src="${cv(manga.cover)}" alt="${manga.titleFa}" loading="lazy" onerror="this.src='https://placehold.co/400x600/0b1633/ffffff?text=Manga'">
+                            <div class="shade"></div>
+                            <span class="rating-pill absolute top-2.5 right-2.5 px-2 py-1 rounded-lg bg-black/60 backdrop-blur-md text-[11px] font-bold text-amber-300 flex items-center gap-1"><i class="fa-solid fa-star text-[10px]"></i>${manga.rating}</span>
+                            <div class="card-top-actions absolute top-2.5 left-2.5 flex items-center gap-1.5">
+                                <button aria-label="ذخیره در لیست من" onclick="event.stopPropagation(); toggleBookmark(${manga.id})" class="w-8 h-8 rounded-lg bg-black/60 backdrop-blur-md hover:bg-blue-600 flex items-center justify-center transition">
+                                    <i class="${isBookmarked ? 'fa-solid text-sky-300' : 'fa-regular text-white'} fa-bookmark text-xs"></i>
+                                </button>
+                                <button aria-label="پیش‌نمایش چپتر" title="پیش‌نمایش سریع" onclick="event.stopPropagation(); openSamplePreviewReader(${manga.id})" class="hidden sm:flex w-8 h-8 rounded-lg bg-black/60 backdrop-blur-md hover:bg-sky-500 text-white items-center justify-center transition opacity-0 group-hover:opacity-100">
+                                    <i class="fa-solid fa-bolt text-xs"></i>
+                                </button>
+                            </div>
+                            ${top ? `<span class="rank">${globalIdx + 1}</span>` : ''}
+                            <div class="cap">
+                                <h3>${manga.titleFa}</h3>
+                                <p class="en">${manga.titleEn}</p>
+                                <button class="go" onclick="event.stopPropagation(); openMangaDetail(${manga.id}, 'info')">
+                                    <span>مشاهده اثر</span>
+                                    <i class="fa-solid fa-arrow-left text-[10px]"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+                    `;
+                }).join('');
+            }
 
             observeScrollReveal();
             applyCardTints();
@@ -2119,14 +2637,98 @@ document.addEventListener('keydown', e => {
         function resetAllFilters() {
             isBookmarkFilterActive = false;
             currentGenreFilter = 'all';
+            currentStatusFilter = 'all';
             currentSearchQuery = '';
             const searchEl = document.getElementById('global-search-input');
             if (searchEl) searchEl.value = '';
+            setStatusFilter('all');
             setGenreFilter('all');
         }
 
+        function openRandomManga() {
+            if (!mangaDatabase.length) return;
+            const pick = mangaDatabase[Math.floor(Math.random() * mangaDatabase.length)];
+            openMangaDetail(pick.id, 'info');
+            showToast(`🎲 مانگای شانسی شما: «${pick.titleFa}»`);
+        }
+
         // =========================================================================
-        // ۴. صفحه اختصاصی هر مانگا با ۳ تب: اطلاعات | چپتر | نظرات
+        // ۶. سابقه مطالعه و نوار «ادامه مطالعه» (Continue Reading)
+        // =========================================================================
+        function saveContinueReadingProgress(mangaId, chapterNum, pageNum, totalPages) {
+            try {
+                const manga = mangaDatabase.find(m => m.id === mangaId);
+                if (!manga) return;
+                const item = {
+                    mangaId,
+                    chapterNum,
+                    pageNum,
+                    totalPages,
+                    updatedAt: Date.now()
+                };
+                localStorage.setItem('blueManga_lastRead_v1', JSON.stringify(item));
+            } catch (e) {}
+        }
+
+        function markChapterAsRead(mangaId, chapterNum) {
+            try {
+                const map = getReadChaptersMap();
+                const arr = map[mangaId] || [];
+                if (!arr.includes(chapterNum)) arr.push(chapterNum);
+                map[mangaId] = arr;
+                localStorage.setItem('blueManga_readChapters_v1', JSON.stringify(map));
+            } catch (e) {}
+        }
+
+        function getReadChaptersMap() {
+            try { return JSON.parse(localStorage.getItem('blueManga_readChapters_v1') || '{}'); } catch (e) { return {}; }
+        }
+
+        function renderContinueReadingBar() {
+            const bar = document.getElementById('continue-reading-bar');
+            if (!bar) return;
+            try {
+                const raw = localStorage.getItem('blueManga_lastRead_v1');
+                if (!raw) { bar.classList.add('hidden'); return; }
+                const data = JSON.parse(raw);
+                const manga = mangaDatabase.find(m => m.id === data.mangaId);
+                if (!manga) { bar.classList.add('hidden'); return; }
+                const pct = Math.min(100, Math.round((data.pageNum / Math.max(1, data.totalPages)) * 100));
+                const chTitle = data.chapterNum === 0 ? 'چپتر پیش‌نمایش' : `چپتر ${data.chapterNum}`;
+
+                bar.classList.remove('hidden');
+                bar.innerHTML = `
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                        <div class="flex items-center gap-3.5">
+                            <img src="${cv(manga.cover)}" alt="${manga.titleFa}" class="w-12 h-16 rounded-xl object-cover border border-white/20 shrink-0">
+                            <div class="space-y-1">
+                                <div class="flex items-center gap-2">
+                                    <span class="px-2 py-0.5 rounded-md bg-sky-500/20 text-sky-300 text-[10px] font-bold">ادامه آخرین مطالعه</span>
+                                    <span class="text-xs text-blue-300/80">${chTitle} • صفحه ${data.pageNum} از ${data.totalPages}</span>
+                                </div>
+                                <h4 class="text-white font-bold text-sm sm:text-base">${manga.titleFa}</h4>
+                                <div class="w-48 sm:w-64 h-1.5 rounded-full bg-white/10 overflow-hidden">
+                                    <div class="h-full bg-gradient-to-l from-sky-400 to-blue-600 rounded-full" style="width:${pct}%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2 self-end sm:self-center">
+                            <button onclick="openReader(${manga.id}, ${data.chapterNum})" class="btn-primary px-4 py-2.5 rounded-xl text-white text-xs font-bold flex items-center gap-1.5">
+                                <i class="fa-solid fa-play"></i><span>ادامه مطالعه</span>
+                            </button>
+                            <button onclick="localStorage.removeItem('blueManga_lastRead_v1');renderContinueReadingBar()" title="پاک کردن" class="w-9 h-9 rounded-xl bg-white/10 hover:bg-rose-600/40 text-blue-200 flex items-center justify-center transition">
+                                <i class="fa-solid fa-xmark text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            } catch (e) {
+                bar.classList.add('hidden');
+            }
+        }
+
+        // =========================================================================
+        // ۷. صفحه اختصاصی هر مانگا با ۴ تب (اطلاعات | چپتر | گالری پنل‌ها | نظرات)
         // =========================================================================
         function openMangaDetail(mangaId, initialTab = 'info') {
             activeMangaId = mangaId;
@@ -2145,7 +2747,8 @@ document.addEventListener('keydown', e => {
             document.getElementById('detail-year-badge').textContent = `انتشار: ${manga.year}`;
             document.getElementById('detail-rating-badge').innerHTML = `<i class="fa-solid fa-star ml-1"></i>${manga.rating} / 10`;
             document.getElementById('detail-title-fa').textContent = manga.titleFa;
-            // تیم مترجم: برای هر مانگا که منبعش مشخص است (کلید = id مانگا)
+
+            // تیم مترجم
             (function () {
                 const TRANSLATORS = { 1: { name: 'AW Manga', logo: 'aw-manga.jpg' } };
                 const t = TRANSLATORS[manga.id], box = document.getElementById('detail-credit');
@@ -2156,11 +2759,12 @@ document.addEventListener('keydown', e => {
                     box.style.display = 'flex';
                 } else box.style.display = 'none';
             })();
+
             document.getElementById('detail-title-en').textContent = `${manga.titleEn} • ${manga.jpTitle}`;
             document.getElementById('detail-author').innerHTML = `<i class="fa-solid fa-pen-nib text-blue-400 ml-1.5"></i>نویسنده و طراح: <strong>${manga.author}</strong>`;
 
             document.getElementById('detail-genres').innerHTML = manga.genres.map(g => `
-                <span class="px-3 py-1 rounded-lg bg-navy-850 border border-blue-400/20 text-xs text-blue-200">${g}</span>
+                <span onclick="showHomeView(false);setGenreFilter('${g}')" class="cursor-pointer px-3 py-1 rounded-lg bg-navy-850 hover:bg-blue-600/40 border border-blue-400/20 text-xs text-blue-200 transition">${g}</span>
             `).join('');
 
             // پر کردن تب اطلاعات
@@ -2169,28 +2773,104 @@ document.addEventListener('keydown', e => {
             document.getElementById('info-jp-title').textContent = manga.jpTitle;
             document.getElementById('info-mangaka').textContent = manga.author;
             document.getElementById('info-magazine').textContent = manga.magazine;
-                        document.getElementById('info-demographic').textContent = manga.mainGenre;
+            document.getElementById('info-chapters-total').textContent = `${manga.chaptersCount} چپتر`;
+            document.getElementById('info-demographic').textContent = manga.mainGenre;
 
-            // شمارنده تب‌ها
-                        document.getElementById('tab-comments-count').textContent = manga.comments.length;
+            // وضعیت مطالعه شخصی کاربر
+            try {
+                const stMap = JSON.parse(localStorage.getItem('blueManga_userStatus_v1') || '{}');
+                document.getElementById('user-reading-status').value = stMap[manga.id] || '';
+            } catch (e) {}
+
+            // رندر آثار مشابه
+            renderSimilarManga(manga);
+
+            // رندر گالری پنل‌ها
+            renderDetailGallery(manga);
+
+            // شمارنده تب نظرات
+            document.getElementById('tab-comments-count').textContent = manga.comments.length;
 
             updateDetailBookmarkButton();
             renderCommentsList();
             renderChaptersList();
-            switchDetailTab(['info', 'chapters', 'comments'].includes(initialTab) ? initialTab : 'info');
+            switchDetailTab(['info', 'chapters', 'gallery', 'comments'].includes(initialTab) ? initialTab : 'info');
+        }
+
+        function renderSimilarManga(manga) {
+            const box = document.getElementById('similar-manga-grid');
+            if (!box) return;
+            const sims = mangaDatabase
+                .filter(m => m.id !== manga.id && (m.mainGenre === manga.mainGenre || m.genres.some(g => manga.genres.includes(g))))
+                .slice(0, 4);
+            box.innerHTML = sims.map(s => `
+                <div onclick="openMangaDetail(${s.id}, 'info')" class="group cursor-pointer rounded-xl bg-navy-950/70 border border-white/10 hover:border-blue-400/40 p-2.5 flex flex-col gap-2 transition">
+                    <div class="aspect-[2/3] rounded-lg overflow-hidden">
+                        <img src="${cv(s.cover)}" alt="${s.titleFa}" class="w-full h-full object-cover object-top group-hover:scale-105 transition duration-500">
+                    </div>
+                    <div>
+                        <h4 class="text-white font-bold text-xs truncate">${s.titleFa}</h4>
+                        <span class="text-[10px] text-amber-300"><i class="fa-solid fa-star ml-1"></i>${s.rating}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderDetailGallery(manga) {
+            const box = document.getElementById('detail-gallery-grid');
+            if (!box) return;
+            const rawPages = (manga.samplePages && manga.samplePages.length)
+                ? [...manga.samplePages, ...defaultReadingPages.slice(0, 4)]
+                : defaultReadingPages.slice(0, 8);
+            const uniquePages = [...new Set(rawPages)];
+            box.innerHTML = uniquePages.map((p, idx) => {
+                const src = cv(p);
+                return `
+                    <div onclick="openLightbox('${src}', '${manga.titleFa} — پنل نمونه ${idx + 1}')" class="group relative aspect-[2/3] rounded-2xl overflow-hidden border border-white/15 bg-navy-950 cursor-pointer">
+                        <img src="${src}" alt="${manga.titleFa}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition flex items-end justify-between p-3">
+                            <span class="text-xs text-white font-bold">پنل ${idx + 1}</span>
+                            <i class="fa-solid fa-magnifying-glass-plus text-sky-300 text-sm"></i>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function saveUserReadingStatus(val) {
+            try {
+                const stMap = JSON.parse(localStorage.getItem('blueManga_userStatus_v1') || '{}');
+                stMap[activeMangaId] = val;
+                localStorage.setItem('blueManga_userStatus_v1', JSON.stringify(stMap));
+                if (val) showToast('وضعیت مطالعه شما برای این اثر ذخیره شد');
+            } catch (e) {}
+        }
+
+        function shareCurrentManga() {
+            const manga = mangaDatabase.find(m => m.id === activeMangaId);
+            if (!manga) return;
+            const shareText = `پیشنهاد مطالعه مانگای «${manga.titleFa}» (${manga.titleEn}) با امتیاز ${manga.rating} در بلو مانگا!`;
+            const temp = document.createElement('textarea');
+            temp.value = shareText;
+            document.body.appendChild(temp);
+            temp.select();
+            document.execCommand('copy');
+            document.body.removeChild(temp);
+            showToast('متن معرفی این مانگا کپی شد!');
         }
 
         function switchDetailTab(tabName) {
-            const tabs = ['info', 'chapters', 'comments'];
+            const tabs = ['info', 'chapters', 'gallery', 'comments'];
             tabs.forEach(t => {
                 const content = document.getElementById(`tab-content-${t}`);
                 const btn = document.getElementById(`tab-btn-${t}`);
+                if (!content || !btn) return;
                 if (t === tabName) {
                     content.classList.remove('hidden');
-                    btn.className = 'px-6 py-3.5 text-xs sm:text-sm font-bold border-b-2 border-white text-white bg-navy-800/60 rounded-t-xl transition flex items-center gap-2';
+                    btn.className = 'px-5 sm:px-6 py-3.5 text-xs sm:text-sm font-bold border-b-2 border-white text-white bg-navy-800/60 rounded-t-xl transition flex items-center gap-2 shrink-0';
                 } else {
                     content.classList.add('hidden');
-                    btn.className = 'px-6 py-3.5 text-xs sm:text-sm font-bold border-b-2 border-transparent text-blue-300/70 hover:text-white rounded-t-xl transition flex items-center gap-2';
+                    btn.className = 'px-5 sm:px-6 py-3.5 text-xs sm:text-sm font-bold border-b-2 border-transparent text-blue-300/70 hover:text-white rounded-t-xl transition flex items-center gap-2 shrink-0';
                 }
             });
         }
@@ -2198,12 +2878,9 @@ document.addEventListener('keydown', e => {
         function showHomeView(scrollTop = true) {
             document.getElementById('manga-detail-view').classList.add('hidden');
             document.getElementById('home-view').classList.remove('hidden');
+            renderContinueReadingBar();
             if (scrollTop) window.scrollTo({ top: 0, behavior: 'smooth' });
         }
-
-        // رندر لیست چپترها در تب «چپتر»
-
-
 
         // رندر و ثبت نظرات در تب «نظرات»
         function renderCommentsList() {
@@ -2222,7 +2899,7 @@ document.addEventListener('keydown', e => {
                 return;
             }
 
-            container.innerHTML = manga.comments.map((c, idx) => `
+            container.innerHTML = manga.comments.map((c) => `
                 <div class="bg-navy-900 border border-blue-400/15 rounded-2xl p-5 space-y-3">
                     <div class="flex items-center justify-between border-b border-blue-400/10 pb-2.5">
                         <div class="flex items-center gap-2.5">
@@ -2288,25 +2965,97 @@ document.addEventListener('keydown', e => {
         }
 
         // =========================================================================
-        // ۵. چپترخوان تعاملی مانگا (Interactive Chapter Reader)
+        // ۸. پالت فرمان و جستجوی اسپات‌لایت (Command Palette) + لایت‌باکس + تم
         // =========================================================================
+        function openCommandPalette() {
+            const modal = document.getElementById('command-palette-modal');
+            const inp = document.getElementById('cmd-palette-input');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            inp.value = '';
+            renderCommandPaletteResults('');
+            setTimeout(() => inp.focus(), 50);
+        }
 
+        function closeCommandPalette() {
+            const modal = document.getElementById('command-palette-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
 
+        function renderCommandPaletteResults(query) {
+            const box = document.getElementById('cmd-palette-results');
+            const q = (query || '').trim().toLowerCase();
+            const list = q
+                ? mangaDatabase.filter(m =>
+                    m.titleFa.toLowerCase().includes(q) ||
+                    m.titleEn.toLowerCase().includes(q) ||
+                    m.author.toLowerCase().includes(q) ||
+                    m.genres.some(g => g.toLowerCase().includes(q)))
+                : mangaDatabase.slice(0, 8);
 
+            if (!list.length) {
+                box.innerHTML = `<div class="p-8 text-center text-xs text-blue-300/70">نتیجه‌ای برای «${query}» پیدا نشد.</div>`;
+                return;
+            }
 
+            box.innerHTML = list.map(m => `
+                <div onclick="closeCommandPalette();openMangaDetail(${m.id}, 'info')" class="flex items-center justify-between gap-3 p-2.5 rounded-2xl hover:bg-white/10 cursor-pointer transition">
+                    <div class="flex items-center gap-3 min-w-0">
+                        <img src="${cv(m.cover)}" alt="${m.titleFa}" class="w-10 h-14 rounded-lg object-cover shrink-0 border border-white/15">
+                        <div class="min-w-0">
+                            <h4 class="text-white font-bold text-xs sm:text-sm truncate">${m.titleFa}</h4>
+                            <p class="text-[11px] text-blue-300/70 truncate" dir="ltr">${m.titleEn} • ${m.author}</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2 shrink-0">
+                        <span class="px-2 py-1 rounded-lg bg-amber-500/20 text-amber-300 text-[11px] font-bold"><i class="fa-solid fa-star ml-1"></i>${m.rating}</span>
+                        <button onclick="event.stopPropagation();closeCommandPalette();openSamplePreviewReader(${m.id})" class="px-2.5 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-[11px] font-bold">مطالعه</button>
+                    </div>
+                </div>
+            `).join('');
+        }
 
+        function openLightbox(src, caption) {
+            const modal = document.getElementById('lightbox-modal');
+            document.getElementById('lightbox-img').src = src;
+            document.getElementById('lightbox-caption').textContent = caption || '';
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
 
+        function closeLightbox() {
+            const modal = document.getElementById('lightbox-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function cycleAccentTheme() {
+            const themes = [
+                { id: '', label: 'آبی سفایر (پیش‌فرض)' },
+                { id: 'crimson', label: 'سرخ کسوف (برسرک)' },
+                { id: 'violet', label: 'بنفش سایبری (جوجوتسو)' },
+                { id: 'emerald', label: 'زمرد نئون (هانتر)' }
+            ];
+            const curr = document.documentElement.getAttribute('data-theme') || '';
+            const nextIdx = (themes.findIndex(t => t.id === curr) + 1) % themes.length;
+            const next = themes[nextIdx];
+            if (next.id) document.documentElement.setAttribute('data-theme', next.id);
+            else document.documentElement.removeAttribute('data-theme');
+            try { localStorage.setItem('blueManga_theme_v1', next.id); } catch (e) {}
+            showToast(`🎨 تم نوری سایت: ${next.label}`);
+        }
 
         // =========================================================================
-        // ۶. بخش ۱۰٪: اسلایدر افقی دیالوگ‌های کوتاه + موضوعات
+        // ۹. اسلایدر افقی دیالوگ‌های ماندگار
         // =========================================================================
         function renderCompactQuotesStrip() {
             const strip = document.getElementById('compact-quotes-strip');
             strip.innerHTML = compactQuotesPanels.map(item => `
-                <div class="quote-card">
-                    <div class="w-11 h-11 rounded-xl chip flex items-center justify-center text-blue-300 shrink-0"><i class="fa-solid fa-quote-right"></i></div>
-                    <div class="space-y-1 text-right">
-                        <span class="text-[11px] font-bold text-blue-400 block">${item.char}</span>
+                <div onclick="openLightbox('${cv(item.img)}', '${item.char}: ${item.quote}')" class="quote-card">
+                    <img src="${cv(item.img)}" alt="${item.char}" loading="lazy" class="w-12 h-12 rounded-xl object-cover border border-white/20 shrink-0">
+                    <div class="space-y-1 text-right min-w-0">
+                        <span class="text-[11px] font-bold text-sky-400 block truncate">${item.char}</span>
                         <p class="text-xs text-white leading-relaxed line-clamp-3">${item.quote}</p>
                     </div>
                 </div>
@@ -2319,7 +3068,7 @@ document.addEventListener('keydown', e => {
         }
 
         // =========================================================================
-        // ۷. افزودن مانگای جدید توسط خود کاربر (Add New Manga Studio)
+        // ۱۰. افزودن مانگای جدید توسط خود کاربر (Add New Manga Studio)
         // =========================================================================
         function openAddMangaModal() {
             const modal = document.getElementById('add-manga-modal');
@@ -2380,9 +3129,7 @@ document.addEventListener('keydown', e => {
 
             if (fileInput.files && fileInput.files[0]) {
                 const reader = new FileReader();
-                reader.onload = function (e) {
-                    finalizeAdd(e.target.result);
-                };
+                reader.onload = function (e) { finalizeAdd(e.target.result); };
                 reader.readAsDataURL(fileInput.files[0]);
             } else {
                 finalizeAdd(urlInput || '447001.jpg');
@@ -2401,7 +3148,7 @@ document.addEventListener('keydown', e => {
         }
 
         // =========================================================================
-        // ۸. مدیریت لیست مطالعه (Bookmarks) و انیمیشن‌های اسکرول
+        // ۱۱. مدیریت لیست مطالعه (Bookmarks) و میانبرهای صفحه‌کلید
         // =========================================================================
         function toggleBookmark(id) {
             if (bookmarkedIds.includes(id)) {
@@ -2411,9 +3158,7 @@ document.addEventListener('keydown', e => {
                 bookmarkedIds.push(id);
                 showToast('به لیست مطالعه شما اضافه شد');
             }
-            try {
-                localStorage.setItem('blueManga_bookmarks_v1', JSON.stringify(bookmarkedIds));
-            } catch (e) {}
+            try { localStorage.setItem('blueManga_bookmarks_v1', JSON.stringify(bookmarkedIds)); } catch (e) {}
             updateBookmarkBadge();
             renderMangaGrid();
             updateDetailBookmarkButton();
@@ -2441,20 +3186,15 @@ document.addEventListener('keydown', e => {
             const box = document.getElementById('toast-box');
             document.getElementById('toast-text').textContent = msg;
             box.classList.remove('translate-y-24', 'opacity-0');
-            setTimeout(() => {
-                box.classList.add('translate-y-24', 'opacity-0');
-            }, 2600);
+            setTimeout(() => { box.classList.add('translate-y-24', 'opacity-0'); }, 2600);
         }
 
         function observeScrollReveal() {
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                    }
+                    if (entry.isIntersecting) entry.target.classList.add('visible');
                 });
-            }, { threshold: 0.1 });
-
+            }, { threshold: 0.08 });
             document.querySelectorAll('.scroll-reveal').forEach(el => observer.observe(el));
         }
 
@@ -2467,23 +3207,33 @@ document.addEventListener('keydown', e => {
         });
 
         document.addEventListener('keydown', e => {
+            if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+                e.preventDefault();
+                openCommandPalette();
+                return;
+            }
             if (e.key === '/' && !/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)) {
                 e.preventDefault();
-                const i = document.getElementById('global-search-input');
-                if (i) { i.focus(); }
+                openCommandPalette();
+            }
+            if (e.key === 'Escape') {
+                closeCommandPalette();
+                closeLightbox();
+                closeAddMangaModal();
             }
         });
 
         document.addEventListener('pointermove', e => {
-            const g = e.target.closest && e.target.closest('.glass');
+            const g = e.target.closest && e.target.closest('.glass, .bento-card');
             if (!g) return;
             const r = g.getBoundingClientRect();
             g.style.setProperty('--mx', (e.clientX - r.left) + 'px');
             g.style.setProperty('--my', (e.clientY - r.top) + 'px');
         });
 
-
-        // ===== v14: رنگ‌گیری از جلد، حرکت سه‌بعدی هیرو =====
+        // =========================================================================
+        // ۱۲. استخراج رنگ پویا از جلد مانگا + حرکت سه‌بعدی هیرو + پنل‌های متحرک
+        // =========================================================================
         const _colCache = new Map();
         function imgColors(src) {
             if (_colCache.has(src)) return _colCache.get(src);
@@ -2494,10 +3244,21 @@ document.addEventListener('keydown', e => {
                         const w = 24, h = 36, c = document.createElement('canvas'); c.width = w; c.height = h;
                         const x = c.getContext('2d', { willReadFrequently: true }); x.drawImage(im, 0, 0, w, h);
                         const d = x.getImageData(0, 0, w, h).data;
-                        const avg = from => { let r=0,g=0,b=0,t=0; for (let y=from; y<h; y++) for (let xx=0; xx<w; xx++) { const k=(y*w+xx)*4, R=d[k],G=d[k+1],B=d[k+2];
-                            const wt=(Math.max(R,G,B)-Math.min(R,G,B))/255+.06; r+=R*wt; g+=G*wt; b+=B*wt; t+=wt; } return [r/t,g/t,b/t]; };
+                        const avg = from => {
+                            let r=0,g=0,b=0,t=0;
+                            for (let y=from; y<h; y++) for (let xx=0; xx<w; xx++) {
+                                const k=(y*w+xx)*4, R=d[k],G=d[k+1],B=d[k+2];
+                                const wt=(Math.max(R,G,B)-Math.min(R,G,B))/255+.06;
+                                r+=R*wt; g+=G*wt; b+=B*wt; t+=wt;
+                            }
+                            return [r/t,g/t,b/t];
+                        };
                         let best=null, bs=-1;
-                        for (let k=0;k<d.length;k+=4){ const mx=Math.max(d[k],d[k+1],d[k+2]), mn=Math.min(d[k],d[k+1],d[k+2]); const sc=(mx-mn)*(mx/255); if(sc>bs){bs=sc;best=[d[k],d[k+1],d[k+2]];} }
+                        for (let k=0;k<d.length;k+=4){
+                            const mx=Math.max(d[k],d[k+1],d[k+2]), mn=Math.min(d[k],d[k+1],d[k+2]);
+                            const sc=(mx-mn)*(mx/255);
+                            if(sc>bs){bs=sc;best=[d[k],d[k+1],d[k+2]];}
+                        }
                         res({ bottom: avg(22), vivid: avg(0), accent: best || avg(0) });
                     } catch (e) { res(null); }
                 };
@@ -2505,6 +3266,7 @@ document.addEventListener('keydown', e => {
             });
             _colCache.set(src, pr); return pr;
         }
+
         function tone(rgb, l, sMax) {
             let [r,g,b] = rgb.map(v => v/255); const mx=Math.max(r,g,b), mn=Math.min(r,g,b); let h=0, s=0; const d=mx-mn;
             if (d) { s = d/(1-Math.abs(mx+mn-1)); h = mx===r ? ((g-b)/d)%6 : mx===g ? (b-r)/d+2 : (r-g)/d+4; h*=60; if (h<0) h+=360; }
@@ -2512,6 +3274,7 @@ document.addEventListener('keydown', e => {
             const [R,G,B] = h<60?[c,x,0]:h<120?[x,c,0]:h<180?[0,c,x]:h<240?[0,x,c]:h<300?[x,0,c]:[c,0,x];
             return [Math.round((R+m)*255), Math.round((G+m)*255), Math.round((B+m)*255)];
         }
+
         function applyCardTints() {
             document.querySelectorAll('#manga-grid .cover').forEach(cov => {
                 const img = cov.querySelector('img'); if (!img) return;
@@ -2523,6 +3286,7 @@ document.addEventListener('keydown', e => {
                 });
             });
         }
+
         function applyHeroColors(src) {
             imgColors(src).then(c => {
                 const sec = document.getElementById('hero-sec'); if (!sec || !c) return;
@@ -2530,6 +3294,7 @@ document.addEventListener('keydown', e => {
                 sec.style.setProperty('--h2', 'rgb(' + tone(c.accent, .52, .95).join(',') + ')');
             });
         }
+
         const hm = { tx:0, ty:0, x:0, y:0, hover:false, gyro:false };
         function heroLoop(ts) {
             requestAnimationFrame(heroLoop);
@@ -2548,16 +3313,14 @@ document.addEventListener('keydown', e => {
             if (!rot || !host) return;
             const words = ['漫画','少年','青春','冒険','運命','覚悟','友情','努力','勝利','夢','闇','光','伝説','物語','ゴゴゴ','ドン','バッ','ザッ','ズバッ','ドドド','あの日','約束','青','戦','魂','風','月','影','絆','剣','海賊','忍','呪術','巨人','怪物'];
             const pick = n => { let o = []; for (let i = 0; i < n; i++) o.push(words[(i * 7 + n * 3 + (i % 3) * 5) % words.length]); return o; };
-            const cfg = [ // [x%, y%, زاویه، اندازه rem]
+            const cfg = [
                 [50, 10, 0, 3.2], [50, 30, 0, 4.6], [50, 55, 180, 3.4], [50, 80, 0, 5],
                 [14, 50, 90, 3], [86, 50, -90, 3.6], [50, 45, 28, 4], [50, 62, -32, 3.2],
                 [30, 50, 62, 3.4], [72, 50, -58, 3], [50, 92, 8, 2.8],
-                // ردیف‌های ثابت (px) برای پر کردن بالای کتابخانه: عنوان، فیلترها و باکس جستجو
                 [50, '90px', 0, 3.4], [50, '210px', 0, 4.4], [50, '330px', 0, 3.2], [50, '450px', 0, 4.8], [50, '570px', 0, 3.4],
                 [50, '690px', 0, 4.2], [50, '810px', 0, 3.2], [50, '930px', 0, 4.6], [50, '1050px', 0, 3.4],
                 [50, '260px', -14, 3.6], [50, '640px', 12, 3.8], [50, '900px', -10, 3.4]
             ];
-            // ادامه‌ی ردیف‌ها تا پایین کتابخانه (بخش خارج از صفحه خودش بریده می‌شود)
             for (let y = 1200, k = 0; y <= 4200; y += 240, k++) cfg.push([50, y + 'px', k % 3 === 0 ? 0 : (k % 3 === 1 ? -8 : 8), 3.2 + (k % 4) * .5]);
             const rows = cfg.map(([x, y, ang, sz], i) => {
                 const a = pick(26 + (i % 4)).map(w => `<span>${w}</span>`).join('');
@@ -2568,27 +3331,24 @@ document.addEventListener('keydown', e => {
             host.insertAdjacentHTML('beforeend', cols.map((t, i) =>
                 `<div class="gl-col" style="left:${6 + i * 14}%;font-size:${1.1 + (i % 3) * .5}rem;animation-duration:${28 + i * 7}s;animation-direction:${i % 2 ? 'alternate' : 'alternate-reverse'};opacity:${.6 + (i % 3) * .2}">${t}</div>`).join(''));
         }
+
         function initHeroMotion() {
             if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
             const sec = document.getElementById('hero-sec'); if (!sec) return;
-            sec.addEventListener('pointermove', e => { if (e.pointerType === 'touch') return; const r = sec.getBoundingClientRect();
-                hm.hover = true; hm.tx = ((e.clientX-r.left)/r.width-.5)*2; hm.ty = ((e.clientY-r.top)/r.height-.5)*2; });
+            sec.addEventListener('pointermove', e => {
+                if (e.pointerType === 'touch') return;
+                const r = sec.getBoundingClientRect();
+                hm.hover = true; hm.tx = ((e.clientX-r.left)/r.width-.5)*2; hm.ty = ((e.clientY-r.top)/r.height-.5)*2;
+            });
             sec.addEventListener('pointerleave', () => { hm.hover = false; });
-            window.addEventListener('deviceorientation', e => { if (e.gamma == null || e.beta == null) return; hm.gyro = true;
-                hm.tx = Math.max(-1, Math.min(1, e.gamma/22)); hm.ty = Math.max(-1, Math.min(1, (e.beta-50)/22)); });
+            window.addEventListener('deviceorientation', e => {
+                if (e.gamma == null || e.beta == null) return;
+                hm.gyro = true;
+                hm.tx = Math.max(-1, Math.min(1, e.gamma/22));
+                hm.ty = Math.max(-1, Math.min(1, (e.beta-50)/22));
+            });
             requestAnimationFrame(heroLoop);
         }
-
-        window.onload = function () {
-            initDatabase();
-            pickRandomFeatured();
-            renderHeroSlider();
-            renderMangaGrid();
-            renderCompactQuotesStrip();
-            buildLibBackdrop();
-            buildHeroGlyphs();
-            initHeroMotion();
-        };
 
         function buildLibBackdrop() {
             const box = document.getElementById('lib-backdrop-in');
@@ -2606,8 +3366,6 @@ document.addEventListener('keydown', e => {
             }
             box.innerHTML = html;
         }
-        // پنل‌های متحرک هر مانگا (کلید = id مانگا). برای مانگای بعدی فقط یک ورودی اضافه کن.
-        // پنل‌های چپترخوان در panels.js
 
         const _panelUrlCache = {};
         async function _panelUrls(id) {
@@ -2617,14 +3375,16 @@ document.addEventListener('keydown', e => {
             catch (e) { urls = PANEL_SETS[id].slice(); }
             return (_panelUrlCache[id] = urls);
         }
+
         async function applyDetailPanels(mangaId) {
             const view = document.getElementById('manga-detail-view');
             const box = document.getElementById('detail-panels-in');
             if (!view || !box) return;
-            if (!PANEL_SETS[mangaId]) { view.classList.remove('has-panels'); box.innerHTML = ''; return; }
+            if (!window.PANEL_SETS || !PANEL_SETS[mangaId]) { view.classList.remove('has-panels'); box.innerHTML = ''; return; }
             const urls = await _panelUrls(mangaId);
             if (activeMangaId !== mangaId) return;
-            const pan = document.getElementById('detail-panels'); const w = pan.offsetWidth || window.innerWidth, h = Math.max(pan.offsetHeight, 500);
+            const pan = document.getElementById('detail-panels');
+            const w = pan.offsetWidth || window.innerWidth, h = Math.max(pan.offsetHeight, 500);
             const colW = Math.min(Math.max(w * 0.15, 104), 192);
             const cols = Math.ceil(w / (colW + 13)) + 2;
             const per = Math.min(14, Math.ceil((h * 1.9) / (colW * 1.5 + 13)) + 2);
@@ -2649,58 +3409,55 @@ document.addEventListener('keydown', e => {
             }, { passive: true });
         })();
 
-        // برش لایه‌ی متن‌های متحرک: از بالای باکس جستجو به پایین
-        function clipHeroGlyphs() {
-            const host = document.getElementById('hero-glyphs'), wrap = document.querySelector('.lib-wrap');
-            const inp = document.querySelector('#manga-library-section input[type="search"]');
-            if (!host || !wrap || !inp) return;
-            const wr = wrap.getBoundingClientRect(), ir = inp.getBoundingClientRect();
-            if (!wr.height) return;
-            host.style.clipPath = 'none'; // حروف از بالای بخش کتابخانه (زیر هیرو) شروع می‌شوند
-        }
-        window.addEventListener('load', () => {
-            clipHeroGlyphs();
-            if (document.fonts && document.fonts.ready) document.fonts.ready.then(clipHeroGlyphs);
-            const w = document.querySelector('.lib-wrap');
-            if (w && window.ResizeObserver) new ResizeObserver(clipHeroGlyphs).observe(w);
-        });
-        window.addEventListener('resize', clipHeroGlyphs);
+        window.onload = function () {
+            initDatabase();
+            pickRandomFeatured();
+            renderHeroSlider();
+            renderContinueReadingBar();
+            renderMangaGrid();
+            renderCompactQuotesStrip();
+            buildLibBackdrop();
+            buildHeroGlyphs();
+            initHeroMotion();
+        };
     </script>
-<script>
-(function () {
-    var t, root = document.documentElement;
-    window.addEventListener('scroll', function () {
-        if (!root.classList.contains('is-scrolling')) root.classList.add('is-scrolling');
-        clearTimeout(t); t = setTimeout(function () { root.classList.remove('is-scrolling'); }, 160);
-    }, { passive: true });
-})();
-</script>
-<script>
-(function () {
-    try {
-        var ua = navigator.userAgent;
-        var safari = /safari/i.test(ua) && !/chrome|crios|android|edg/i.test(ua);
-        var v = document.createElement('video');
-        if (safari || !v.canPlayType || !v.canPlayType('video/webm; codecs="vp9"')) return;
-        if (navigator.connection && navigator.connection.saveData) return;
-        var wrap = document.getElementById('glyph-video'), lib = document.querySelector('.lib-wrap');
-        if (!wrap || !lib) return;
-        v.muted = true; v.loop = true; v.playsInline = true; v.preload = 'auto';
-        v.setAttribute('playsinline', ''); v.setAttribute('aria-hidden', 'true');
-        v.addEventListener('playing', function () { document.documentElement.classList.add('gv'); }, { once: true });
-        v.addEventListener('error', function () { document.documentElement.classList.remove('gv'); });
-        v.src = 'glyphs.webm?v=1';
-        wrap.appendChild(v);
-        var p = v.play(); if (p && p.catch) p.catch(function () {});
-        if ('IntersectionObserver' in window) {
-            new IntersectionObserver(function (es) {
-                es.forEach(function (e) {
-                    if (e.isIntersecting) { var q = v.play(); if (q && q.catch) q.catch(function () {}); } else v.pause();
-                });
-            }, { threshold: 0 }).observe(lib);
-        }
-    } catch (e) {}
-})();
-</script>
+
+    <script>
+        (function () {
+            var t, root = document.documentElement;
+            window.addEventListener('scroll', function () {
+                if (!root.classList.contains('is-scrolling')) root.classList.add('is-scrolling');
+                clearTimeout(t); t = setTimeout(function () { root.classList.remove('is-scrolling'); }, 160);
+            }, { passive: true });
+        })();
+    </script>
+
+    <script>
+        (function () {
+            try {
+                var ua = navigator.userAgent;
+                var safari = /safari/i.test(ua) && !/chrome|crios|android|edg/i.test(ua);
+                var v = document.createElement('video');
+                if (safari || !v.canPlayType || !v.canPlayType('video/webm; codecs="vp9"')) return;
+                if (navigator.connection && navigator.connection.saveData) return;
+                var wrap = document.getElementById('glyph-video'), lib = document.querySelector('.lib-wrap');
+                if (!wrap || !lib) return;
+                v.muted = true; v.loop = true; v.playsInline = true; v.preload = 'auto';
+                v.setAttribute('playsinline', ''); v.setAttribute('aria-hidden', 'true');
+                v.addEventListener('playing', function () { document.documentElement.classList.add('gv'); }, { once: true });
+                v.addEventListener('error', function () { document.documentElement.classList.remove('gv'); });
+                v.src = 'glyphs.webm?v=1';
+                wrap.appendChild(v);
+                var p = v.play(); if (p && p.catch) p.catch(function () {});
+                if ('IntersectionObserver' in window) {
+                    new IntersectionObserver(function (es) {
+                        es.forEach(function (e) {
+                            if (e.isIntersecting) { var q = v.play(); if (q && q.catch) q.catch(function () {}); } else v.pause();
+                        });
+                    }, { threshold: 0 }).observe(lib);
+                }
+            } catch (e) {}
+        })();
+    </script>
 </body>
 </html>
