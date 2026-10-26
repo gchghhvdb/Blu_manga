@@ -6,21 +6,7 @@
     <title>بلو مانگا | مرجع نسل جدید مطالعه آنلاین مانگا</title>
     
     <!-- بارگذاری Tailwind CSS با پشتیبان خودکار -->
-    <!--TW-CDN-START--><script src="https://cdn.tailwindcss.com" onerror="window.__twFailed=1"></script>
-    <script>
-        (function(){
-            if (typeof window.tailwind !== 'undefined') return;
-            var st = document.createElement('style');
-            st.type = 'text/tailwindcss';
-            st.textContent = '@theme{--font-sans:"Vazirmatn",sans-serif;--font-display:"Lalezar",cursive;--font-jp:"Noto Serif JP",serif;'
-              + '--color-navy-950:#01040d;--color-navy-900:#030a1f;--color-navy-850:#061231;--color-navy-800:#0a1c4d;'
-              + '--color-navy-700:#12307a;--color-navy-600:#1e4fc4;--color-navy-500:#3b82f6;--color-navy-400:#60a5fa;}';
-            document.head.appendChild(st);
-            var s = document.createElement('script');
-            s.src = 'https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.1.11';
-            document.head.appendChild(s);
-        })();
-    </script><!--TW-CDN-END-->
+    
     
     <!-- فونت‌های فارسی وزیرمتن، لاله‌زار و فونت ژاپنی -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -29,36 +15,9 @@
     <noscript><link href="https://fonts.googleapis.com/css2?family=Lalezar&family=Noto+Serif+JP:wght@600;900&family=Vazirmatn:wght@300;400;500;700;900&display=swap" rel="stylesheet"></noscript>
     
     <!-- آیکون‌های FontAwesome -->
-    <!--FA-START--><link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" media="print" onload="this.media='all'">
-    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"></noscript><!--FA-END-->
+    <link rel="stylesheet" href="fa/css/all.min.css">
 
-    <!--TW-CFG-START--><script>
-        window.tailwind = window.tailwind || {};
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Vazirmatn', 'sans-serif'],
-                        display: ['Lalezar', 'cursive'],
-                        jp: ['"Noto Serif JP"', 'serif']
-                    },
-                    colors: {
-                        navy: {
-                            950: '#01040d',
-                            900: '#030a1f',
-                            850: '#061231',
-                            800: '#0a1c4d',
-                            700: '#12307a',
-                            600: '#1e4fc4',
-                            500: '#3b82f6',
-                            400: '#60a5fa',
-                        }
-                    }
-                }
-            }
-        }
-    </script><!--TW-CFG-END-->
+    
 
     <style>
         /* ===== استایل‌های اضطراری در صورت عدم بارگذاری Tailwind ===== */
@@ -437,6 +396,7 @@
         :focus-visible { outline: 2px solid #60a5fa; outline-offset: 2px; border-radius: .6rem; }
         @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } .scroll-reveal { opacity: 1; transform: none; } }
     </style>
+    <link rel="stylesheet" href="tailwind.css">
 </head>
 <body class="selection:bg-blue-600 selection:text-white">
 
