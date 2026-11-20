@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بلو مانگا | مانگا</title>
+
+    <!-- فونت‌های فارسی وزیرمتن، لاله‌زار و فونت ژاپنی -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lalezar&family=Noto+Serif+JP:wght@600;900&family=Vazirmatn:wght@300;400;500;700;900&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Lalezar&family=Noto+Serif+JP:wght@600;900&family=Vazirmatn:wght@300;400;500;700;900&display=swap" rel="stylesheet"></noscript>
+
+    <!-- آیکون‌های FontAwesome -->
+    <link rel="stylesheet" href="fa/css/all.min.css">
+    <link rel="stylesheet" href="style.css?v=1">
+    <link rel="stylesheet" href="tailwind.css">
+</head>
+<body class="selection:bg-blue-600 selection:text-white">
+
+    <!-- نوار پیشرفت اسکرول در بالاترین نقطه -->
+    <div class="fixed top-0 right-0 left-0 h-[3px] z-50">
+        <div id="scroll-bar" class="h-full bg-gradient-to-l from-blue-500 via-sky-400 to-white/90 w-0 transition-all duration-75"></div>
+    </div>
+
+    <header id="site-header" class="fixed top-3 inset-x-3 z-40 mx-auto max-w-7xl rounded-2xl glass">
+        <div class="px-4 sm:px-5 h-14 flex items-center justify-between gap-4">
+            
+            <!-- لوگو -->
+            <a href="index.html" class="flex items-center gap-3 group shrink-0">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-navy-800 border border-white/20 flex items-center justify-center text-white font-jp font-black text-xl shadow-lg shadow-blue-900/40 group-hover:border-white transition">
+                    青
+                </div>
+                <div>
+                    <span class="font-display text-2xl text-white tracking-wide block leading-none">بلو مانگا</span>
+                    <span class="text-[10px] text-blue-300/70">مرجع مطالعه آنلاین مانگا</span>
+                </div>
+            </a>
+
+            <!-- لینک‌های منو -->
+            <nav class="hidden lg:flex items-center gap-7 text-sm font-medium text-blue-100/80">
+                <button onclick="showHomeView()" class="hover:text-white transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-house text-blue-400 text-xs"></i>
+                    <span>صفحه اصلی</span>
+                </button>
+                <a href="index.html#manga-library-section" class="hover:text-white transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-book-open text-blue-400 text-xs"></i>
+                    <span>کتابخانه</span>
+                </a>
+                <button onclick="filterByBookmarks()" class="hover:text-white transition flex items-center gap-1.5">
+                    <i class="fa-regular fa-bookmark text-blue-400 text-xs"></i>
+                    <span>لیست مطالعه من</span>
+                    <span id="bookmark-count-badge" class="px-1.5 py-0.5 text-[10px] rounded-full bg-navy-700 text-white">0</span>
+                </button>
+                <a href="index.html#quotes-and-topics" class="hover:text-white transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-quote-right text-blue-400 text-xs"></i>
+                    <span>دیالوگ‌ها</span>
+                </a>
+            </nav>
+
+            <!-- جستجو و دکمه افزودن مانگای جدید -->
+            <div class="flex items-center gap-2.5">
+                <div class="relative hidden sm:block w-52 md:w-64">
+                    <input id="global-search-input" onkeydown="if(event.key==='Enter'){location.href='index.html?q='+encodeURIComponent(this.value)}" type="text" placeholder="جستجوی مانگا یا نویسنده   ( / )" class="w-full bg-navy-900/90 border border-blue-400/20 focus:border-white/60 rounded-xl px-3.5 py-2 pr-9 text-xs text-white placeholder-blue-200/40 focus:outline-none transition">
+                    <i class="fa-solid fa-magnifying-glass absolute right-3 top-2.5 text-blue-400/60 text-xs"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section id="manga-detail-view" class="pt-16 pb-24 min-h-screen">
+        <!-- بنر محو بالای صفحه مانگا -->
+        <div class="relative overflow-hidden border-b border-blue-400/20 bg-navy-900/90">
+            <div id="detail-bg-blur" class="absolute inset-0 bg-cover bg-center opacity-20 blur-2xl scale-110 pointer-events-none"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-navy-950 via-navy-950/85 to-navy-950/50 pointer-events-none"></div><div id="detail-panels" aria-hidden="true"><div class="dp-in" id="detail-panels-in"></div></div>
+
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
+                <!-- دکمه بازگشت به کتابخانه -->
+                <button onclick="goBackToLibrary()" class="mb-6 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-navy-850 hover:bg-navy-700 border border-blue-400/25 text-xs font-bold text-white transition">
+                    <i class="fa-solid fa-arrow-right"></i>
+                    <span>بازگشت به کتابخانه مانگا</span>
+                </button>
+
+                <!-- هدر مشخصات مانگا -->
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+                    <div class="md:col-span-3 flex justify-center md:justify-start">
+                        <div class="w-52 sm:w-60 rounded-2xl overflow-hidden border-2 border-white/30 shadow-2xl shadow-blue-950">
+                            <img id="detail-cover-img" src="" alt="Manga Cover" class="w-full h-80 object-cover">
+                        </div>
+                    </div>
+
+                    <div class="md:col-span-9 space-y-4 text-right">
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span id="detail-status-badge" class="px-3 py-1 rounded-full bg-blue-600/30 border border-blue-400/40 text-blue-200 text-xs font-bold"></span>
+                            <span id="detail-year-badge" class="px-3 py-1 rounded-full bg-navy-800 border border-blue-400/20 text-blue-300 text-xs"></span>
+                            <span id="detail-rating-badge" class="px-3 py-1 rounded-full bg-amber-500/20 border border-amber-400/40 text-amber-300 text-xs font-bold"></span>
+                        </div>
+
+                        <div>
+                            <h1 id="detail-title-fa" class="font-display text-3xl sm:text-5xl text-white"></h1>
+                            <p id="detail-title-en" class="text-sm text-blue-300/80 font-medium mt-1" dir="ltr"></p>
+                        </div>
+
+                        <p id="detail-author" class="text-xs sm:text-sm text-blue-200"></p>
+
+                        <div id="detail-genres" class="flex flex-wrap gap-2 pt-1"></div>
+
+                        <!-- دکمه‌های عملیاتی سریع -->
+                        <div class="flex flex-wrap items-center gap-3 pt-3">
+                            <button id="detail-bookmark-btn" onclick="toggleBookmarkCurrent()" class="px-4 py-3 rounded-xl bg-navy-850 hover:bg-navy-700 text-blue-200 border border-blue-400/20 text-xs sm:text-sm transition flex items-center gap-2">
+                                <i class="fa-regular fa-bookmark"></i>
+                                <span>افزودن به لیست من</span>
+                            </button>
+                        </div>
+
+                        <!-- تیم مترجم -->
+                        <div class="aw-credit" id="detail-credit">
+                            <span class="aw-burn"><img id="detail-credit-img" src="aw-manga.jpg" alt="" width="42" height="42" loading="lazy" decoding="async"></span>
+                            <span class="t">توسط تیم <b dir="ltr" id="detail-credit-name">AW Manga</b> ترجمه شده</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- نوار ۳ تب اصلی: اطلاعات | چپتر | نظرات -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="flex items-center gap-2 sm:gap-4 border-t border-blue-400/15 pt-3">
+                    <button id="tab-btn-info" onclick="switchDetailTab('info')" class="px-6 py-3.5 text-xs sm:text-sm font-bold border-b-2 border-white text-white bg-navy-800/60 rounded-t-xl transition flex items-center gap-2">
+                        <i class="fa-solid fa-circle-info text-blue-400"></i>
+                        <span>اطلاعات</span>
+                    </button>
+                    <button id="tab-btn-chapters" onclick="switchDetailTab('chapters')" class="px-6 py-3.5 text-xs sm:text-sm font-bold border-b-2 border-transparent text-blue-300/70 hover:text-white rounded-t-xl transition flex items-center gap-2">
+                        <i class="fa-solid fa-layer-group text-blue-400"></i>
+                        <span>چپتر</span>
+                    </button>
+                    <button id="tab-btn-comments" onclick="switchDetailTab('comments')" class="px-6 py-3.5 text-xs sm:text-sm font-bold border-b-2 border-transparent text-blue-300/70 hover:text-white rounded-t-xl transition flex items-center gap-2">
+                        <i class="fa-regular fa-comments text-blue-400"></i>
+                        <span>نظرات</span>
+                        <span id="tab-comments-count" class="px-2 py-0.5 text-[11px] rounded-full bg-navy-800 text-blue-200"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- محتوای تب‌های سه‌گانه -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
+            
+            <!-- محتوای تب ۱: اطلاعات (INFO TAB) -->
+            <div id="tab-content-info" class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <div class="lg:col-span-8 space-y-6">
+                    <div class="bg-navy-900 border border-blue-400/15 rounded-2xl p-6 space-y-3">
+                        <h3 class="font-bold text-white text-lg flex items-center gap-2">
+                            <span class="w-1.5 h-5 rounded-full bg-blue-500"></span>
+                            <span>خلاصه داستان و معرفی مانگا</span>
+                        </h3>
+                        <p id="detail-synopsis" class="text-blue-100/85 text-sm sm:text-base leading-relaxed"></p>
+                    </div>
+
+                    <!-- دیالوگ شاخص این مانگا -->
+                    <div class="bg-navy-850/90 border border-blue-400/20 rounded-2xl p-5 space-y-2">
+                        <div class="text-xs font-bold text-blue-400 flex items-center gap-1.5">
+                            <i class="fa-solid fa-quote-right"></i>
+                            <span>دیالوگ ماندگار این اثر:</span>
+                        </div>
+                        <p id="detail-quote" class="text-white font-bold text-sm sm:text-base leading-relaxed"></p>
+                    </div>
+                </div>
+
+                <!-- جدول مشخصات فنی مانگا -->
+                <div class="lg:col-span-4 space-y-6">
+                    <div class="bg-navy-900 border border-blue-400/15 rounded-2xl p-6 space-y-4">
+                        <h3 class="font-bold text-white text-base border-b border-blue-400/15 pb-3">مشخصات شناسنامه‌ای اثر</h3>
+                        <div class="space-y-3 text-xs sm:text-sm">
+                            <div class="flex justify-between py-1.5 border-b border-blue-400/10">
+                                <span class="text-blue-300/70">نام ژاپنی:</span>
+                                <span id="info-jp-title" class="text-white font-jp font-bold"></span>
+                            </div>
+                            <div class="flex justify-between py-1.5 border-b border-blue-400/10">
+                                <span class="text-blue-300/70">طراح و نویسنده:</span>
+                                <span id="info-mangaka" class="text-white font-medium"></span>
+                            </div>
+                            <div class="flex justify-between py-1.5 border-b border-blue-400/10">
+                                <span class="text-blue-300/70">مجله ناشر:</span>
+                                <span id="info-magazine" class="text-white font-medium"></span>
+                            </div>
+                            <div class="flex justify-between py-1.5">
+                                <span class="text-blue-300/70">رده سنی و سبک:</span>
+                                <span id="info-demographic" class="text-blue-300 font-bold"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- محتوای تب چپتر (فعلاً بدون چپتر) -->
+            <div id="tab-content-chapters" class="hidden">
+                <div id="chapters-list-container"></div>
+            </div>
+
+            <!-- محتوای تب ۳: نظرات کاربران (COMMENTS TAB) -->
+            <div id="tab-content-comments" class="hidden grid grid-cols-1 lg:grid-cols-12 gap-8">
+                
+                <!-- فرم ثبت نظر جدید -->
+                <div class="lg:col-span-5">
+                    <div class="bg-navy-900 border border-blue-400/15 rounded-2xl p-6 space-y-4 sticky top-24">
+                        <h3 class="font-bold text-white text-base flex items-center gap-2">
+                            <i class="fa-regular fa-pen-to-square text-blue-400"></i>
+                            <span>ثبت دیدگاه و امتیاز برای این مانگا</span>
+                        </h3>
+
+                        <div class="space-y-3">
+                            <div>
+                                <label class="text-xs text-blue-300/80 block mb-1">نام شما:</label>
+                                <input id="comment-user-name" type="text" placeholder="مثلاً: آریا - طرفدار سینن" class="w-full bg-navy-950 border border-blue-400/20 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-white/60">
+                            </div>
+
+                            <div>
+                                <label class="text-xs text-blue-300/80 block mb-1">امتیاز شما (از ۱ تا ۵ ستاره):</label>
+                                <select id="comment-user-rating" class="w-full bg-navy-950 border border-blue-400/20 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none">
+                                    <option value="5">⭐⭐⭐⭐⭐ (۵/۵ - شاهکار بی‌نظیر)</option>
+                                    <option value="4">⭐⭐⭐⭐ (۴/۵ - بسیار عالی)</option>
+                                    <option value="3">⭐⭐⭐ (۳/۵ - خوب و سرگرم‌کننده)</option>
+                                    <option value="2">⭐⭐ (۲/۵ - متوسط)</option>
+                                    <option value="1">⭐ (۱/۵ - ضعیف)</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="text-xs text-blue-300/80 block mb-1">متن دیدگاه:</label>
+                                <textarea id="comment-user-text" rows="4" placeholder="نظرتان درباره داستان، شخصیت‌پردازی یا طراحی این مانگا را بنویسید..." class="w-full bg-navy-950 border border-blue-400/20 rounded-xl p-3.5 text-xs text-white focus:outline-none focus:border-white/60"></textarea>
+                            </div>
+
+                            <label class="flex items-center gap-2 text-xs text-blue-200 cursor-pointer">
+                                <input id="comment-spoiler-check" type="checkbox" class="rounded bg-navy-950 border-blue-400/30 text-blue-600">
+                                <span>این نظر حاوی اسپویل (لو رفتن داستان) است</span>
+                            </label>
+
+                            <button onclick="submitMangaComment()" class="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs border border-white/20 shadow-lg transition">
+                                ارسال و انتشار دیدگاه
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- لیست نظرات ثبت‌شده -->
+                <div class="lg:col-span-7 space-y-4" id="comments-list-container">
+                    <!-- توسط جاوااسکریپت پر می‌شود -->
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <div id="toast-box" class="fixed bottom-24 lg:bottom-5 left-5 z-50 bg-blue-600 border border-white/30 text-white px-5 py-3 rounded-xl shadow-2xl text-xs font-bold transform translate-y-24 opacity-0 transition-all duration-300 flex items-center gap-2">
+        <i class="fa-solid fa-circle-check"></i>
+        <span id="toast-text">عملیات انجام شد</span>
+    </div>
+
+    <nav class="tabbar fixed bottom-3 inset-x-3 z-40 lg:hidden glass rounded-2xl flex px-2" aria-label="ناوبری">
+        <button onclick="showHomeView()"><i class="fa-solid fa-house"></i><span>خانه</span></button>
+        <a href="index.html#manga-library-section"><i class="fa-solid fa-book-open"></i><span>کتابخانه</span></a>
+        <button onclick="filterByBookmarks()"><i class="fa-regular fa-bookmark"></i><span>لیست من</span></button>
+    </nav>
+
+
+    <footer class="bg-navy-950 border-t border-blue-400/15 py-8 text-center text-xs text-blue-300/60">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-2">
+                <span class="w-6 h-6 rounded-lg bg-blue-600 text-white font-jp font-bold flex items-center justify-center">青</span>
+                <span class="text-white font-bold">بلو مانگا</span>
+                <span>— پلتفرم اختصاصی مطالعه آنلاین مانگا</span>
+            </div>
+            <div>
+                <span>افزودن مانگای جدید + ذخیره خودکار نظرات</span>
+            </div>
+        </div>
+    </footer>
+
+    <script src="covers.js?v=1" defer></script>
+    <script src="data.js?v=1" defer></script>
+    <script src="common.js?v=1" defer></script>
+    <script src="manga.js?v=1" defer></script>
+</body>
+</html>
