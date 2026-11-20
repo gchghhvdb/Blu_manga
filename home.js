@@ -112,35 +112,17 @@ function setHeroSlide(idx) {
 // ۳. رندر کتابخانه مانگاها (Manga Library Grid)
 // =========================================================================
 const MANGA_PER_PAGE = 14;
-let libPage = 1;
+let libPage = 1; // تعداد دسته‌های نمایش‌داده‌شده (هر دسته ۱۴ مانگا)
 
-function renderPager(total) {
+function renderPager(total, shown) {
     const box = document.getElementById('manga-pager');
     if (!box) return;
-    if (total <= 1) { box.innerHTML = ''; return; }
-    const btn = (label, page, cls, aria) =>
-        `<button type="button" onclick="goLibPage(${page})" aria-label="${aria}" class="pg-btn ${cls}">${label}</button>`;
-    let html = '';
-    html += btn('<i class="fa-solid fa-chevron-right"></i>', libPage - 1, libPage === 1 ? 'dis' : '', 'صفحه قبل');
-    for (let p = 1; p <= total; p++) {
-        html += btn(p.toLocaleString('fa-IR'), p, p === libPage ? 'on' : '', 'صفحه ' + p);
-    }
-    html += btn('<i class="fa-solid fa-chevron-left"></i>', libPage + 1, libPage === total ? 'dis' : '', 'صفحه بعد');
-    box.innerHTML = html;
+    if (shown >= total) { box.innerHTML = ''; return; }
+    box.innerHTML = '<button type="button" onclick="showMoreManga()" class="more-btn">بیشتر<i class="fa-solid fa-chevron-down"></i></button>';
 }
 
-function goLibPage(p) {
-    if (p < 1) return;
-    libPage = p;
-    renderMangaGrid();
-    const g = document.getElementById('manga-grid');
-    if (g) window.scrollTo({ top: g.getBoundingClientRect().top + window.scrollY - 150, behavior: 'smooth' });
-}
-
-function renderMangaGrid() {
-    const grid = document.getElementById('manga-grid');
+function getFilteredManga() {
     const sortBy = document.getElementById('sort-select').value;
-
     let filtered = mangaDatabase.filter(m => {
         if (isBookmarkFilterActive && !bookmarkedIds.includes(m.id)) return false;
         if (currentGenreFilter !== 'all' && !m.genres.includes(currentGenreFilter) && m.mainGenre !== currentGenreFilter) {
@@ -164,31 +146,12 @@ function renderMangaGrid() {
     } else if (sortBy === 'newest') {
         filtered.sort((a, b) => b.year - a.year);
     }
+    return filtered;
+}
 
-    document.getElementById('manga-count-number').textContent = filtered.length;
-
-    if (filtered.length === 0) {
-        renderPager(0);
-        grid.innerHTML = `
-            <div class="col-span-full bg-navy-900/80 border border-blue-400/15 rounded-2xl p-10 text-center space-y-3">
-                <i class="fa-solid fa-book-open text-3xl text-blue-400/50"></i>
-                <p class="text-white font-bold text-base">مانگایی با این مشخصات یافت نشد.</p>
-                <button onclick="resetAllFilters()" class="px-4 py-2 rounded-xl bg-blue-600 text-white text-xs font-bold">نمایش همه مانگاها</button>
-            </div>
-        `;
-        return;
-    }
-
-    // صفحه‌بندی: ۱۴ مانگا در هر صفحه
-    const totalPages = Math.max(1, Math.ceil(filtered.length / MANGA_PER_PAGE));
-    if (libPage > totalPages) libPage = totalPages;
-    if (libPage < 1) libPage = 1;
-    renderPager(totalPages);
-    filtered = filtered.slice((libPage - 1) * MANGA_PER_PAGE, libPage * MANGA_PER_PAGE);
-
-    grid.innerHTML = filtered.map((manga, i) => {
-        const isBookmarked = bookmarkedIds.includes(manga.id);
-        const top = sortBy === 'popular' && currentGenreFilter === 'all' && !currentSearchQuery && !isBookmarkFilterActive && i < 3;
+function mangaCardHtml(manga, i, sortBy) {
+    const isBookmarked = bookmarkedIds.includes(manga.id);
+    const top = sortBy === 'popular' && currentGenreFilter === 'all' && !currentSearchQuery && !isBookmarkFilterActive && i < 3;
         return `
         <article class="m-card group scroll-reveal">
             <div class="cover" onclick="openMangaDetail(${manga.id}, 'info')">
@@ -207,7 +170,45 @@ function renderMangaGrid() {
             </div>
         </article>
         `;
-    }).join('');
+}
+
+// دکمهٔ «بیشتر»: فقط مانگاهای بعدی را به انتهای لیست اضافه می‌کند
+function showMoreManga() {
+    const grid = document.getElementById('manga-grid');
+    const sortBy = document.getElementById('sort-select').value;
+    const list = getFilteredManga();
+    const from = libPage * MANGA_PER_PAGE;
+    if (from >= list.length) return;
+    const to = Math.min(list.length, from + MANGA_PER_PAGE);
+    libPage++;
+    grid.insertAdjacentHTML('beforeend', list.slice(from, to).map((m, k) => mangaCardHtml(m, from + k, sortBy)).join(''));
+    renderPager(list.length, to);
+    observeScrollReveal();
+    applyCardTints();
+}
+
+function renderMangaGrid() {
+    const grid = document.getElementById('manga-grid');
+    const sortBy = document.getElementById('sort-select').value;
+    const filtered = getFilteredManga();
+
+    document.getElementById('manga-count-number').textContent = filtered.length;
+
+    if (filtered.length === 0) {
+        renderPager(0, 0);
+        grid.innerHTML = `
+            <div class="col-span-full bg-navy-900/80 border border-blue-400/15 rounded-2xl p-10 text-center space-y-3">
+                <i class="fa-solid fa-book-open text-3xl text-blue-400/50"></i>
+                <p class="text-white font-bold text-base">مانگایی با این مشخصات یافت نشد.</p>
+                <button onclick="resetAllFilters()" class="px-4 py-2 rounded-xl bg-blue-600 text-white text-xs font-bold">نمایش همه مانگاها</button>
+            </div>
+        `;
+        return;
+    }
+
+    const shown = Math.min(filtered.length, libPage * MANGA_PER_PAGE);
+    renderPager(filtered.length, shown);
+    grid.innerHTML = filtered.slice(0, shown).map((m, i) => mangaCardHtml(m, i, sortBy)).join('');
 
     observeScrollReveal();
     applyCardTints();
