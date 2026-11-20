@@ -493,7 +493,7 @@ function showHomeView(scrollTop = true) {
         v.setAttribute('playsinline', ''); v.setAttribute('aria-hidden', 'true');
         v.addEventListener('playing', function () { document.documentElement.classList.add('gv'); }, { once: true });
         v.addEventListener('error', function () { document.documentElement.classList.remove('gv'); });
-        v.src = 'glyphs.webm?v=1';
+        v.src = assetUrl('glyphs.webm');
         wrap.appendChild(v);
         var p = v.play(); if (p && p.catch) p.catch(function () {});
         if ('IntersectionObserver' in window) {

@@ -1,5 +1,12 @@
 // کدهای مشترک بین همهٔ صفحه‌ها
-const cv = c => IMG[c] || c;
+// آدرس فضای ذخیره‌سازی آروان برای فایل‌های سنگین (کاورها، پنل‌ها، ویدیو).
+// اگر خالی بگذاری ('')، فایل‌ها مثل قبل از خود گیت‌هاب خوانده می‌شوند.
+const ASSET_BASE = 'https://mahdiggff2.s3.ir-central1.arvanstorage.ir/assets/';
+function assetUrl(f) {
+    if (!f || !ASSET_BASE || /^(https?:|data:|blob:|\/\/)/.test(f)) return f;
+    return ASSET_BASE + f;
+}
+const cv = c => IMG[c] || assetUrl(c);
 
 let mangaDatabase = [];
 let bookmarkedIds = [];

@@ -216,7 +216,7 @@ function openMangaDetail(mangaId, initialTab = 'info') {
         if (!box) return;
         if (t) {
             document.getElementById('detail-credit-name').textContent = t.name;
-            const im = document.getElementById('detail-credit-img'); im.src = t.logo; im.alt = t.name;
+            const im = document.getElementById('detail-credit-img'); im.src = assetUrl(t.logo); im.alt = t.name;
             box.style.display = 'flex';
         } else box.style.display = 'none';
     })();
@@ -347,8 +347,8 @@ const _panelUrlCache = {};
 async function _panelUrls(id) {
     if (_panelUrlCache[id]) return _panelUrlCache[id];
     let urls;
-    try { urls = await Promise.all(PANEL_SETS[id].map(async d => URL.createObjectURL(await (await fetch(d)).blob()))); }
-    catch (e) { urls = PANEL_SETS[id].slice(); }
+    try { urls = await Promise.all(PANEL_SETS[id].map(async d => URL.createObjectURL(await (await fetch(assetUrl(d))).blob()))); }
+    catch (e) { urls = PANEL_SETS[id].map(assetUrl); }
     return (_panelUrlCache[id] = urls);
 }
 async function applyDetailPanels(mangaId) {
